@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import ModDashboardHeader from "@/components/ModDashboardHeader";
 import { getAllPosts } from "@/actions/get-all-posts";
+import { trimContentSize } from "@/lib/utils";
 
 async function DashboardPage() {
   const posts = await getAllPosts();
@@ -35,7 +36,7 @@ async function DashboardPage() {
           {posts.map((post) => (
             <TableRow key={post.id}>
               <TableCell className="font-medium">{post.id}</TableCell>
-              <TableCell>{post.content}</TableCell>
+              <TableCell>{trimContentSize(post.content, 20)}</TableCell>
               <TableCell>
                 {post.answered ? (
                   <FaCheck color="green" />
