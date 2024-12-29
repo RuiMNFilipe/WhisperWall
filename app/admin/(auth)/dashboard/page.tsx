@@ -15,6 +15,7 @@ import {
 import ModDashboardHeader from "@/components/ModDashboardHeader";
 import { getAllPosts } from "@/actions/get-all-posts";
 import Link from "next/link";
+import { trimContentSize } from "@/lib/utils";
 
 async function DashboardPage() {
   const posts = await getAllPosts();
@@ -37,8 +38,7 @@ async function DashboardPage() {
             <TableRow key={post.id}>
               <TableCell className="font-medium">
                 <Link href={`dashboard/posts/${post.id}/`}>{post.id}</Link>
-              </TableCell>
-              <TableCell>{post.content}</TableCell>
+              <TableCell>{trimContentSize(post.content, 20)}</TableCell>
               <TableCell>
                 {post.answered ? (
                   <FaCheck color="green" />
