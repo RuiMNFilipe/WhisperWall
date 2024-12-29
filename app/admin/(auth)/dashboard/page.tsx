@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import ModDashboardHeader from "@/components/ModDashboardHeader";
 import { getAllPosts } from "@/actions/get-all-posts";
+import Link from "next/link";
 import { trimContentSize } from "@/lib/utils";
 
 async function DashboardPage() {
@@ -35,7 +36,8 @@ async function DashboardPage() {
         <TableBody>
           {posts.map((post) => (
             <TableRow key={post.id}>
-              <TableCell className="font-medium">{post.id}</TableCell>
+              <TableCell className="font-medium">
+                <Link href={`dashboard/posts/${post.id}/`}>{post.id}</Link>
               <TableCell>{trimContentSize(post.content, 20)}</TableCell>
               <TableCell>
                 {post.answered ? (
