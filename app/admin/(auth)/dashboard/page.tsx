@@ -38,6 +38,7 @@ async function DashboardPage() {
             <TableRow key={post.id}>
               <TableCell className="font-medium">
                 <Link href={`dashboard/posts/${post.id}/`}>{post.id}</Link>
+              </TableCell>
               <TableCell>{trimContentSize(post.content, 20)}</TableCell>
               <TableCell>
                 {post.answered ? (
