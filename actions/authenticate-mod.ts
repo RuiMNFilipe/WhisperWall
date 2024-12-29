@@ -47,7 +47,7 @@ export const authenticateModAction = async (
       sameSite: "strict",
     });
 
-    redirect("/admin/dashboard");
+    redirect("/admin/dashboard/");
   } catch (error) {
     console.error("Um erro ocorreu: ", error);
     throw error;

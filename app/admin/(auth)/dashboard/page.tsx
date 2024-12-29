@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import ModDashboardHeader from "@/components/ModDashboardHeader";
 import { getAllPosts } from "@/actions/get-all-posts";
+import Link from "next/link";
 
 async function DashboardPage() {
   const posts = await getAllPosts();
@@ -34,7 +35,9 @@ async function DashboardPage() {
         <TableBody>
           {posts.map((post) => (
             <TableRow key={post.id}>
-              <TableCell className="font-medium">{post.id}</TableCell>
+              <TableCell className="font-medium">
+                <Link href={`dashboard/posts/${post.id}/`}>{post.id}</Link>
+              </TableCell>
               <TableCell>{post.content}</TableCell>
               <TableCell>
                 {post.answered ? (
