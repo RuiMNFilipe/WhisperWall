@@ -6,10 +6,26 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/db/db";
 
 export async function logoutModAction() {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("sessionToken")?.value;
+  try {
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get("sessionToken")?.value;
 
-  if (sessionToken) {
+    if (!sessionToken) {
+      console.error("No session token found in cookies.");
+      redirect("/admin");
+    }
+
+    const moderator = await prisma.moderator.findUnique({
+      where: {
+        sessionToken,
+      },
+    });
+
+    if (!moderator) {
+      console.error("No moderator found in the provided session token.");
+      redirect("/admin");
+    }
+
     await prisma.moderator.update({
       where: {
         sessionToken,
@@ -18,6 +34,7 @@ export async function logoutModAction() {
         sessionToken: null,
       },
     });
+
     cookieStore.set({
       name: "sessionToken",
       value: "",
@@ -29,5 +46,8 @@ export async function logoutModAction() {
     });
 
     return redirect("/admin");
+  } catch (error) {
+    console.error("An error occurred during logout:", error);
+    throw error;
   }
 }
