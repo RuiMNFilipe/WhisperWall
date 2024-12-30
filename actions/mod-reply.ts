@@ -20,12 +20,13 @@ export const modReply = async (formData: FormData, postId: number) => {
       },
     });
 
-    return { success: true };
+    return { success: true, redirectTo: "/admin/dashboard" };
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      message: "Um erro inesperado ocorreu. Por favor tente mais tarde.",
+      message:
+        "Ocorreu um erro inesperado ao atualizar o post. Por favor, tente mais tarde.",
     };
   }
 };

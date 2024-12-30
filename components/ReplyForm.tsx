@@ -3,6 +3,7 @@
 import React from "react";
 import { modReply } from "@/actions/mod-reply";
 import { Post } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 interface ReplyFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   post: Post;
@@ -10,7 +11,13 @@ interface ReplyFormProps extends React.FormHTMLAttributes<HTMLFormElement> {
 
 export default function ReplyForm({ post, ...rest }: ReplyFormProps) {
   const handleReply = async (formData: FormData) => {
-    await modReply(formData, Number(post.id));
+    const result = await modReply(formData, Number(post.id));
+
+    if (result.success) {
+      redirect(result.redirectTo!);
+    } else {
+      console.error(result.message);
+    }
   };
 
   return (
