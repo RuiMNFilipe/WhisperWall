@@ -1,4 +1,5 @@
 import { createPostAction } from "@/actions/create-post";
+import PostsList from "@/components/PostsList";
 
 export default function Home() {
   return (
@@ -12,6 +13,8 @@ export default function Home() {
           Submeter
         </button>
       </form>
+
+      <PostsList />
     </main>
   );
 }
