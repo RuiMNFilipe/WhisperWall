@@ -9,7 +9,6 @@ export const modDeletePost = async (id: number) => {
         id,
       },
     });
-
     return { success: true };
   } catch (error) {
     console.error(error);
