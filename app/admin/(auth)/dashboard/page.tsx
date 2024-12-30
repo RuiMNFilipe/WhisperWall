@@ -1,8 +1,7 @@
-"use server";
+"use client";
 
 import { FaX } from "react-icons/fa6";
 import { FaCheck, FaReply, FaTrashAlt } from "react-icons/fa";
-
 import {
   Table,
   TableBody,
@@ -16,9 +15,30 @@ import ModDashboardHeader from "@/components/ModDashboardHeader";
 import { getAllPosts } from "@/actions/get-all-posts";
 import Link from "next/link";
 import { trimContentSize } from "@/lib/utils";
+import DeleteDialog from "@/components/DeleteDialog";
+import { modDeletePost } from "@/actions/mod-delete-post";
+import { Post } from "@prisma/client";
+import { useEffect, useState } from "react";
 
-async function DashboardPage() {
-  const posts = await getAllPosts();
+function DashboardPage() {
+  const [posts, setPosts] = useState<Post[] | null>(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const data = await getAllPosts();
+      setPosts(data);
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (posts === null) {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <section>
@@ -49,7 +69,33 @@ async function DashboardPage() {
                 <Link href={`dashboard/posts/${post.id}/`}>
                   <FaReply color="green" />
                 </Link>
-                <FaTrashAlt color="red" />
+                <DeleteDialog
+                  triggerElement={
+                    <button>
+                      <FaTrashAlt color="red" />
+                    </button>
+                  }
+                  title={`Tem a certeza que quer apagar o Post com ID ${post.id}?`}
+                  description="Esta ação é irreversível e irá remover este post permanentemente."
+                  onConfirm={async () => {
+                    try {
+                      const result = await modDeletePost(post.id);
+
+                      if (result.success) {
+                        setPosts((prevPosts) =>
+                          prevPosts === null
+                            ? null
+                            : prevPosts.filter(
+                                (postToDelete) => postToDelete.id !== post.id
+                              )
+                        );
+                      }
+                    } catch (error) {
+                      console.error(error);
+                      throw error;
+                    }
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}
