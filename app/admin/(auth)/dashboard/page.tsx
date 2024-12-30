@@ -25,8 +25,13 @@ function DashboardPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const data = await getAllPosts();
-      setPosts(data);
+      try {
+        const data = await getAllPosts();
+        setPosts(data);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     };
 
     fetchPosts();
@@ -67,12 +72,12 @@ function DashboardPage() {
               </TableCell>
               <TableCell className="flex items-center gap-x-5">
                 <Link href={`dashboard/posts/${post.id}/`}>
-                  <FaReply color="green" />
+                  <FaReply title="Responder" color="green" />
                 </Link>
                 <DeleteDialog
                   triggerElement={
-                    <button>
-                      <FaTrashAlt color="red" />
+                    <button title="Remover post">
+                      <FaTrashAlt title="Remover post" color="red" />
                     </button>
                   }
                   title={`Tem a certeza que quer apagar o Post com ID ${post.id}?`}
