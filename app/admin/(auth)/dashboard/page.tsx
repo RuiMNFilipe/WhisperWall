@@ -1,7 +1,7 @@
 "use server";
 
-import { FaPencil, FaX } from "react-icons/fa6";
-import { FaCheck, FaTrashAlt } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
+import { FaCheck, FaReply, FaTrashAlt } from "react-icons/fa";
 
 import {
   Table,
@@ -36,9 +36,7 @@ async function DashboardPage() {
         <TableBody>
           {posts.map((post) => (
             <TableRow key={post.id}>
-              <TableCell className="font-medium">
-                <Link href={`dashboard/posts/${post.id}/`}>{post.id}</Link>
-              </TableCell>
+              <TableCell className="font-medium">{post.id}</TableCell>
               <TableCell>{trimContentSize(post.content, 20)}</TableCell>
               <TableCell>
                 {post.answered ? (
@@ -48,7 +46,9 @@ async function DashboardPage() {
                 )}
               </TableCell>
               <TableCell className="flex items-center gap-x-5">
-                <FaPencil color="green" />
+                <Link href={`dashboard/posts/${post.id}/`}>
+                  <FaReply color="green" />
+                </Link>
                 <FaTrashAlt color="red" />
               </TableCell>
             </TableRow>
