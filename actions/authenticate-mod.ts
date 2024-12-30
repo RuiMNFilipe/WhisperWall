@@ -45,6 +45,7 @@ export const authenticateModAction = async (
       secure: process.env.NODE_ENV === "production",
       path: "/",
       sameSite: "strict",
+      maxAge: 3600, // set to expire after 1h
     });
 
     redirect("/admin/dashboard/");
