@@ -3,7 +3,7 @@
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
 
-export const getAllPosts = async (): Promise<ServerActionFeedback> => {
+export const getAllPostsAction = async (): Promise<ServerActionFeedback> => {
   try {
     const allPosts = await prisma.post.findMany();
     return { success: true, data: allPosts };
