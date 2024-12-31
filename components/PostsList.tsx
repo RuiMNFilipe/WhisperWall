@@ -1,14 +1,16 @@
-"use server";
+"use client";
 
-import { getAnsweredPosts } from "@/actions/get-answered-posts";
+import { Post } from "@prisma/client";
 import Card from "./Card";
 
-const PostsList = async () => {
-  const posts = await getAnsweredPosts();
+interface PostsListProps {
+  answeredPosts: Post[];
+}
 
+const PostsList = ({ answeredPosts }: PostsListProps) => {
   return (
     <div className="w-[70%] grid grid-cols-3 gap-6 mx-auto justify-center">
-      {posts.map((post) => (
+      {answeredPosts.map((post) => (
         <Card key={post.id} content={post.content} answer={post.answer} />
       ))}
     </div>
