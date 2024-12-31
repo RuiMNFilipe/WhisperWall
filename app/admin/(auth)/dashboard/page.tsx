@@ -12,25 +12,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ModDashboardHeader from "@/components/ModDashboardHeader";
-import { getAllPosts } from "@/actions/get-all-posts";
+import { getAllPostsAction } from "@/actions/get-all-posts";
 import Link from "next/link";
 import { trimContentSize } from "@/lib/utils";
 import DeleteDialog from "@/components/DeleteDialog";
 import { modDeletePost } from "@/actions/mod-delete-post";
 import { Post } from "@prisma/client";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function DashboardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      try {
-        const data = await getAllPosts();
-        setPosts(data);
-      } catch (error) {
-        console.error(error);
-        throw error;
+      const result = await getAllPostsAction();
+
+      if (result.success) {
+        setPosts(result.data!);
+      } else {
+        console.error(result.message);
+        toast.error(result.message);
       }
     };
 
