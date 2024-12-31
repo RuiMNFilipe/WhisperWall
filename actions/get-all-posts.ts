@@ -11,7 +11,8 @@ export const getAllPostsAction = async (): Promise<ServerActionFeedback> => {
     console.error(error);
     return {
       success: false,
-      message: "Ocorreu um erro inesperado. Por favor, tente mais tarde.",
+      message:
+        "Ocorreu um erro inesperado ao tentar obter todos os Posts. Por favor, tente mais tarde.",
     };
   }
 };
