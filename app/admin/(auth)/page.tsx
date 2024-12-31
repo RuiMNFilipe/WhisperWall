@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { FaSpinner } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 export default function AdminLoginPage() {
   const { pending } = useFormStatus();
@@ -20,9 +21,11 @@ export default function AdminLoginPage() {
     );
 
     if (result.success) {
+      toast.success(result.message);
       redirect("/admin/dashboard/");
     } else {
       console.error(result.message);
+      toast.error(result.message);
     }
   };
 
