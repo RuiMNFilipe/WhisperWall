@@ -1,16 +1,19 @@
 "use server";
 
-import { getAnsweredPosts } from "@/actions/get-answered-posts";
+import { getAnsweredPostsAction } from "@/actions/get-answered-posts";
 import PostForm from "@/components/PostForm";
 import PostsList from "@/components/PostsList";
+import { toast } from "react-toastify";
 
 export default async function Home() {
-  const posts = await getAnsweredPosts();
+  const result = await getAnsweredPostsAction();
+
+  if (!result.success) toast.error(result.message);
 
   return (
     <main className="bg-slate-400 h-screen py-8">
       <PostForm />
-      <PostsList answeredPosts={posts} />
+      <PostsList answeredPosts={result.success ? result.data! : []} />
     </main>
   );
 }
