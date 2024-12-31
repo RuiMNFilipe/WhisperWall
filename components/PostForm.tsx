@@ -1,15 +1,17 @@
 "use client";
 
 import { createPostAction } from "@/actions/create-post";
+import { toast } from "react-toastify";
 
 const PostForm = () => {
   const handleSubmit = async (formData: FormData) => {
     const result = await createPostAction(formData);
 
     if (result.success) {
-      alert("Post submetido com sucesso!");
+      toast.success(result.message);
     } else {
       console.error(result.message);
+      toast.error(result.message);
     }
   };
   return (
