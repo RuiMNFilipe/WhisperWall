@@ -1,13 +1,17 @@
 "use server";
 
 import { prisma } from "@/db/db";
+import { ServerActionFeedback } from "@/types";
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (): Promise<ServerActionFeedback> => {
   try {
     const allPosts = await prisma.post.findMany();
-    return allPosts;
+    return { success: true, data: allPosts };
   } catch (error) {
     console.error(error);
-    throw error;
+    return {
+      success: false,
+      message: "Ocorreu um erro inesperado. Por favor, tente mais tarde.",
+    };
   }
 };
