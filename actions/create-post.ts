@@ -8,6 +8,8 @@ export const createPostAction = async (formData: FormData) => {
   await prisma.post.create({
     data: {
       content: content as string,
+      answered: false,
+      answer: "",
     },
   });
 };
