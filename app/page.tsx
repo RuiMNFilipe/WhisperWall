@@ -1,25 +1,16 @@
-import { createPostAction } from "@/actions/create-post";
+"use server";
+
+import { getAnsweredPosts } from "@/actions/get-answered-posts";
+import PostForm from "@/components/PostForm";
 import PostsList from "@/components/PostsList";
 
-export default function Home() {
+export default async function Home() {
+  const posts = await getAnsweredPosts();
+
   return (
     <main className="bg-slate-400 h-screen py-8">
-      <form
-        action={createPostAction}
-        className="flex flex-col items-center gap-y-8 mb-10"
-      >
-        <textarea
-          name="content"
-          required
-          className="resize-none text-black w-1/2"
-          placeholder="Em que estás a pensar?"
-        />
-        <button type="submit" className="rounded-md bg-blue-300 text-white p-2">
-          Submeter
-        </button>
-      </form>
-
-      <PostsList />
+      <PostForm />
+      <PostsList answeredPosts={posts} />
     </main>
   );
 }
