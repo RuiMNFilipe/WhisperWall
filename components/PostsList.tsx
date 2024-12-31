@@ -8,11 +8,13 @@ interface PostsListProps {
 }
 
 const PostsList = ({ answeredPosts }: PostsListProps) => {
-  return (
-    <div className="w-[70%] grid grid-cols-3 gap-6 mx-auto justify-center">
-      {answeredPosts.map((post) => (
-        <Card key={post.id} content={post.content} answer={post.answer} />
-      ))}
+  return answeredPosts.length > 0 ? (
+    answeredPosts.map((post) => (
+      <Card key={post.id} content={post.content} answer={post.answer} />
+    ))
+  ) : (
+    <div className="h-screen w-screen justify-center items-center">
+      Não existem Posts ainda...
     </div>
   );
 };
