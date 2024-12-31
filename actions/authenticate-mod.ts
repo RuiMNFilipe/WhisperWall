@@ -47,7 +47,11 @@ export const authenticateModAction = async (
       maxAge: 3600, // set to expire after 1h
     });
 
-    return { success: true, redirectTo: "/admin/dashboard/" };
+    return {
+      success: true,
+      message: "Entrou com sucesso!",
+      redirectTo: "/admin/dashboard/",
+    };
   } catch (error) {
     console.error("Um erro ocorreu: ", error);
     return {
