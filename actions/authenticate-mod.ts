@@ -2,7 +2,6 @@
 
 import crypto from "crypto";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { prisma } from "@/db/db";
 import { verifyPassword } from "./utils";
@@ -48,9 +47,13 @@ export const authenticateModAction = async (
       maxAge: 3600, // set to expire after 1h
     });
 
-    redirect("/admin/dashboard/");
+    return { success: true, redirectTo: "/admin/dashboard/" };
   } catch (error) {
     console.error("Um erro ocorreu: ", error);
-    throw error;
+    return {
+      success: false,
+      message:
+        "Ocorreu um erro inesperado ao autenticar o utilizador. Por favor, tente mais tarde.",
+    };
   }
 };
