@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/db/db";
+import { convertMilliseconds } from "@/lib/utils";
 import { ServerActionFeedback } from "@/types";
 
 export const getAvgResponseTimeAction =
@@ -21,7 +22,7 @@ export const getAvgResponseTimeAction =
 
       if (posts.length === 0) return { success: true, avgReplyTime: "N/A" };
 
-      const avgReplyTime =
+      const avgReplyTimeMs =
         posts.reduce((acc, post) => {
           const createdAt = new Date(post.created_at).getTime();
           const repliedAt = new Date(post.replied_at!).getTime();
@@ -29,7 +30,10 @@ export const getAvgResponseTimeAction =
           return acc + (repliedAt - createdAt);
         }, 0) / posts.length;
 
-      return { success: true, avgReplyTime };
+      return {
+        success: true,
+        avgReplyTime: convertMilliseconds(avgReplyTimeMs),
+      };
     } catch (error) {
       console.error(error);
       return {
