@@ -4,5 +4,6 @@ type ServerActionFeedback = {
   success: boolean;
   message?: string;
   redirectTo?: string;
-  data?: Post[] | Post;
+  data?: Post[] | Post | number;
+  avgReplyTime?: number | string;
 };
