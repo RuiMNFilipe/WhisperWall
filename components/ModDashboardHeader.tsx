@@ -33,6 +33,7 @@ function ModDashboardHeader() {
           height={50}
         />
       </Link>
+      <Link href={"/admin/dashboard"}>Dashboard</Link>
       <button onClick={handleLogout} disabled={pending}>
         <FaSignOutAlt />
       </button>
