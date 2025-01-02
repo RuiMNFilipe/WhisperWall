@@ -13,9 +13,7 @@ const PostsList = ({ answeredPosts }: PostsListProps) => {
       <Card key={post.id} content={post.content} answer={post.answer} />
     ))
   ) : (
-    <div className="h-screen w-screen justify-center items-center">
-      Não existem Posts ainda...
-    </div>
+    <div>Não existem Posts ainda...</div>
   );
 };
 
