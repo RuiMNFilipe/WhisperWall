@@ -12,30 +12,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ModDashboardHeader from "@/components/ModDashboardHeader";
-import { getAllPosts } from "@/actions/get-all-posts";
+import { getAllPostsAction } from "@/actions/get-all-posts";
 import Link from "next/link";
 import { trimContentSize } from "@/lib/utils";
 import DeleteDialog from "@/components/DeleteDialog";
-import { modDeletePost } from "@/actions/mod-delete-post";
+import { modDeletePostAction } from "@/actions/mod-delete-post";
 import { Post } from "@prisma/client";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function DashboardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      try {
-        const data = await getAllPosts();
-        setPosts(data);
-      } catch (error) {
-        console.error(error);
-        throw error;
+      const result = await getAllPostsAction();
+
+      if (result.success) {
+        setPosts(result.data as Post[]);
+      } else {
+        console.error(result.message);
+        toast.error(result.message);
       }
     };
 
     fetchPosts();
   }, []);
+
+  const handleConfirm = async (post: Post) => {
+    const result = await modDeletePostAction(post.id);
+
+    if (result.success) {
+      toast.success(result.message);
+      setPosts((prevPosts) =>
+        prevPosts === null
+          ? null
+          : prevPosts.filter((postToDelete) => postToDelete.id !== post.id)
+      );
+    } else {
+      toast.error(result.message);
+    }
+  };
 
   if (posts === null) {
     return (
@@ -82,24 +99,7 @@ function DashboardPage() {
                   }
                   title={`Tem a certeza que quer apagar o Post com ID ${post.id}?`}
                   description="Esta ação é irreversível e irá remover este post permanentemente."
-                  onConfirm={async () => {
-                    try {
-                      const result = await modDeletePost(post.id);
-
-                      if (result.success) {
-                        setPosts((prevPosts) =>
-                          prevPosts === null
-                            ? null
-                            : prevPosts.filter(
-                                (postToDelete) => postToDelete.id !== post.id
-                              )
-                        );
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      throw error;
-                    }
-                  }}
+                  onConfirm={async () => await handleConfirm(post)}
                 />
               </TableCell>
             </TableRow>

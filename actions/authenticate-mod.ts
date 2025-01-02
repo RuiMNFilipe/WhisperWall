@@ -2,32 +2,40 @@
 
 import crypto from "crypto";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { prisma } from "@/db/db";
 import { verifyPassword } from "./utils";
+import { ServerActionFeedback } from "@/types";
 
 export const authenticateModAction = async (
   email: string,
   password: string
-) => {
+): Promise<ServerActionFeedback> => {
+  if (!email || !password) {
+    return {
+      success: false,
+      message: "Campos de email e password são obrigatórios.",
+    };
+  }
+
+  const moderator = await prisma.moderator.findUnique({
+    where: { email },
+  });
+
+  if (!moderator)
+    return {
+      success: false,
+      message: "Credenciais inválidas. Por favor, tente novamente.",
+    };
+
+  const isPasswordValid = await verifyPassword(password, moderator.password);
+
+  if (!isPasswordValid)
+    return {
+      success: false,
+      message: "Credenciais inválidas. Por favor, tente novamente.",
+    };
   try {
-    if (!email || !password) {
-      throw new Error("Campos de email e password são obrigatórios.");
-    }
-
-    const moderator = await prisma.moderator.findUnique({
-      where: { email },
-    });
-
-    if (!moderator)
-      throw new Error("Credenciais inválidas. Por favor, tente novamente.");
-
-    const isPasswordValid = await verifyPassword(password, moderator.password);
-
-    if (!isPasswordValid)
-      throw new Error("Credenciais inválidas. Por favor, tente novamente.");
-
     const sessionToken = crypto.randomBytes(32).toString("hex");
 
     await prisma.moderator.update({
@@ -48,9 +56,17 @@ export const authenticateModAction = async (
       maxAge: 3600, // set to expire after 1h
     });
 
-    redirect("/admin/dashboard/");
+    return {
+      success: true,
+      message: "Entrou com sucesso!",
+      redirectTo: "/admin/dashboard/",
+    };
   } catch (error) {
     console.error("Um erro ocorreu: ", error);
-    throw error;
+    return {
+      success: false,
+      message:
+        "Ocorreu um erro inesperado ao autenticar o utilizador. Por favor, tente mais tarde.",
+    };
   }
 };

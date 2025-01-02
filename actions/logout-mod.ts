@@ -4,8 +4,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/db/db";
+import { ServerActionFeedback } from "@/types";
 
-export async function logoutModAction() {
+export async function logoutModAction(): Promise<ServerActionFeedback> {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("sessionToken")?.value;
@@ -23,7 +24,11 @@ export async function logoutModAction() {
 
     if (!moderator) {
       console.error("No moderator found in the provided session token.");
-      redirect("/admin");
+      return {
+        success: false,
+        message: "Não foi encontrado nenhum Moderador com estas credenciais.",
+        redirectTo: "/admin",
+      };
     }
 
     await prisma.moderator.update({
@@ -45,9 +50,13 @@ export async function logoutModAction() {
       sameSite: "strict",
     });
 
-    return redirect("/admin");
+    return { success: true, redirectTo: "/admin" };
   } catch (error) {
     console.error("An error occurred during logout:", error);
-    throw error;
+    return {
+      success: false,
+      message:
+        "Ocorreu um erro inesperado durante o logout. Por favor, tente mais tarde.",
+    };
   }
 }

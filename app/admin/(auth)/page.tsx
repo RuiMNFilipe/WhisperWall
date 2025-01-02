@@ -2,8 +2,10 @@
 
 import { authenticateModAction } from "@/actions/authenticate-mod";
 import Button from "@/components/Button";
+import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { FaSpinner } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 export default function AdminLoginPage() {
   const { pending } = useFormStatus();
@@ -12,15 +14,18 @@ export default function AdminLoginPage() {
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      await authenticateModAction(email as string, password as string);
-    } catch (error) {
-      if (error instanceof Error && error.message !== "NEXT_REDIRECT")
-        alert(
-          error.message ||
-            "Um erro inesperado ocorreu. Por favor, tente outra vez."
-        );
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const result = await authenticateModAction(
+      email as string,
+      password as string
+    );
+
+    if (result.success) {
+      toast.success(result.message);
+      redirect("/admin/dashboard/");
+    } else {
+      console.error(result.message);
+      toast.error(result.message);
     }
   };
 

@@ -1,8 +1,12 @@
 "use server";
 
 import { prisma } from "@/db/db";
+import { ServerActionFeedback } from "@/types";
 
-export const modReply = async (formData: FormData, postId: number) => {
+export const modReplyAction = async (
+  formData: FormData,
+  postId: number
+): Promise<ServerActionFeedback> => {
   try {
     const answer = formData.get("answer");
 

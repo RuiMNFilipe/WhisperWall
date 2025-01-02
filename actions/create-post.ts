@@ -1,13 +1,28 @@
 "use server";
 
 import { prisma } from "@/db/db";
+import { revalidatePath } from "next/cache";
 
 export const createPostAction = async (formData: FormData) => {
-  const content = formData.get("content");
+  try {
+    const content = formData.get("content");
 
-  await prisma.post.create({
-    data: {
-      content: content as string,
-    },
-  });
+    await prisma.post.create({
+      data: {
+        content: content as string,
+        answered: false,
+        answer: "",
+      },
+    });
+
+    revalidatePath("/");
+    return { success: true, message: "Post submetido com sucesso!" };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message:
+        "Um erro inesperado ocorreu ao tentar submeter o Post. Por favor, tente novamente.",
+    };
+  }
 };
