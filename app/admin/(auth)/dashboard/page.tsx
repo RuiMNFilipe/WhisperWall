@@ -14,7 +14,7 @@ import {
 import ModDashboardHeader from "@/components/ModDashboardHeader";
 import { getAllPostsAction } from "@/actions/get-all-posts";
 import Link from "next/link";
-import { trimContentSize } from "@/lib/utils";
+import { setLocaleDateAndTime, trimContentSize } from "@/lib/utils";
 import DeleteDialog from "@/components/DeleteDialog";
 import { modDeletePostAction } from "@/actions/mod-delete-post";
 import { Post } from "@prisma/client";
@@ -72,6 +72,7 @@ function DashboardPage() {
             <TableHead>ID</TableHead>
             <TableHead>Conteúdo</TableHead>
             <TableHead>Respondido</TableHead>
+            <TableHead>Data criação</TableHead>
             <TableHead className="w-[100px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -87,6 +88,7 @@ function DashboardPage() {
                   <FaX color="red" />
                 )}
               </TableCell>
+              <TableCell>{setLocaleDateAndTime(post.created_at)}</TableCell>
               <TableCell className="flex items-center gap-x-5">
                 <Link href={`dashboard/posts/${post.id}/`}>
                   <FaReply title="Responder" color="green" />
