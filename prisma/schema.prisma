@@ -18,8 +18,10 @@ model Moderator {
 }
 
 model Post {
-  id       Int     @id @default(autoincrement())
-  content  String
-  answer   String
-  answered Boolean
+  id         Int       @id @default(autoincrement())
+  content    String
+  answer     String
+  answered   Boolean
+  created_at DateTime  @default(now())
+  replied_at DateTime?
 }
