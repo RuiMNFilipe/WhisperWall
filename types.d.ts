@@ -1,9 +1,16 @@
 import { Post } from "@prisma/client";
 
+type ReplyTime = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
 type ServerActionFeedback = {
   success: boolean;
   message?: string;
   redirectTo?: string;
   data?: Post[] | Post | number;
-  avgReplyTime?: number | string;
+  avgReplyTime?: string | ReplyTime;
 };
