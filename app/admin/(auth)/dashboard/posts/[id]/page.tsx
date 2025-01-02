@@ -19,7 +19,10 @@ async function PostDetailPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <section className="flex flex-col h-screen w-screen items-center justify-center">
+    <section
+      className="flex flex-col items-center justify-center"
+      style={{ height: "calc(100vh - 50px)" }}
+    >
       <div className="flex flex-col w-[70%] mx-auto border border-slate-400 rounded-xl bg-slate-600 gap-10 p-10">
         <div className="w-full text-center text-white">
           <p>{(data as Post).content}</p>
