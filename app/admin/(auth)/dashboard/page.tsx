@@ -1,6 +1,5 @@
 "use client";
 
-import ModDashboardHeader from "@/components/ModDashboardHeader";
 import { DataTable } from "@/components/DataTable";
 import { createColumns } from "@/components/headers";
 import { useEffect, useState } from "react";
@@ -58,7 +57,6 @@ function DashboardPage() {
   }
   return (
     <section>
-      <ModDashboardHeader />
       <DataTable columns={createColumns(handleDelete)} data={posts} />
       <h2>
         Tempo médio de resposta:{" "}
