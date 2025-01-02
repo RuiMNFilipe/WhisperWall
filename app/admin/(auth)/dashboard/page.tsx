@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { Post } from "@prisma/client";
 import { getAvgResponseTimeAction } from "@/actions/getAvgResponseTime";
 import { ReplyTime } from "@/types";
+import { formatTimeObject } from "@/lib/utils";
 
 function DashboardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -59,8 +60,14 @@ function DashboardPage() {
     <section>
       <ModDashboardHeader />
       <DataTable columns={createColumns(handleDelete)} data={posts} />
-      <h2>Tempo médio de resposta:</h2>
-      <p>{`${avgResponseTime?.days} dias, ${avgResponseTime?.hours} horas, ${avgResponseTime?.minutes} minutos e ${avgResponseTime?.seconds} segundos.`}</p>
+      <h2>
+        Tempo médio de resposta:{" "}
+        <span>
+          {avgResponseTime
+            ? formatTimeObject(avgResponseTime)
+            : "A calcular..."}
+        </span>
+      </h2>
     </section>
   );
 }
