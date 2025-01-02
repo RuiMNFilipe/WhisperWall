@@ -7,9 +7,14 @@ import { useEffect, useState } from "react";
 import { getAllPostsAction } from "@/actions/get-all-posts";
 import { toast } from "react-toastify";
 import { Post } from "@prisma/client";
+import { getAvgResponseTimeAction } from "@/actions/getAvgResponseTime";
+import { ReplyTime } from "@/types";
 
 function DashboardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
+  const [avgResponseTime, setAvgResponseTime] = useState<ReplyTime | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -23,7 +28,18 @@ function DashboardPage() {
       }
     };
 
+    const fetchAvgReplyTimes = async () => {
+      const result = await getAvgResponseTimeAction();
+
+      if (result.success) {
+        setAvgResponseTime(result.avgReplyTime as ReplyTime);
+      } else {
+        console.error(result.message);
+      }
+    };
+
     fetchPosts();
+    fetchAvgReplyTimes();
   }, []);
 
   const handleDelete = (postId: number) => {
@@ -43,6 +59,8 @@ function DashboardPage() {
     <section>
       <ModDashboardHeader />
       <DataTable columns={createColumns(handleDelete)} data={posts} />
+      <h2>Tempo médio de resposta:</h2>
+      <p>{`${avgResponseTime?.days} dias, ${avgResponseTime?.hours} horas, ${avgResponseTime?.minutes} minutos e ${avgResponseTime?.seconds} segundos.`}</p>
     </section>
   );
 }
