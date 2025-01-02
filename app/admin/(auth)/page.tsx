@@ -1,7 +1,7 @@
 "use client";
 
 import { authenticateModAction } from "@/actions/authenticate-mod";
-import Button from "@/components/Button";
+import FormButton from "@/components/Button";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { FaSpinner } from "react-icons/fa6";
@@ -55,12 +55,12 @@ export default function AdminLoginPage() {
             className="text-black"
           />
         </div>
-        <Button
+        <FormButton
           type="submit"
           className="rounded-md p-2 text-white bg-green-300"
         >
           {pending ? <FaSpinner /> : "Entrar"}
-        </Button>
+        </FormButton>
       </form>
     </section>
   );

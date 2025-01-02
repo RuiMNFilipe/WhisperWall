@@ -1,28 +1,20 @@
 "use client";
 
-import { FaX } from "react-icons/fa6";
-import { FaCheck, FaReply, FaTrashAlt } from "react-icons/fa";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import ModDashboardHeader from "@/components/ModDashboardHeader";
-import { getAllPostsAction } from "@/actions/get-all-posts";
-import Link from "next/link";
-import { trimContentSize } from "@/lib/utils";
-import DeleteDialog from "@/components/DeleteDialog";
-import { modDeletePostAction } from "@/actions/mod-delete-post";
-import { Post } from "@prisma/client";
+import { DataTable } from "@/components/DataTable";
+import { createColumns } from "@/components/headers";
 import { useEffect, useState } from "react";
+import { getAllPostsAction } from "@/actions/get-all-posts";
 import { toast } from "react-toastify";
+import { Post } from "@prisma/client";
+import { getAvgResponseTimeAction } from "@/actions/getAvgResponseTime";
+import { ReplyTime } from "@/types";
 
 function DashboardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
+  const [avgResponseTime, setAvgResponseTime] = useState<ReplyTime | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -36,76 +28,39 @@ function DashboardPage() {
       }
     };
 
+    const fetchAvgReplyTimes = async () => {
+      const result = await getAvgResponseTimeAction();
+
+      if (result.success) {
+        setAvgResponseTime(result.avgReplyTime as ReplyTime);
+      } else {
+        console.error(result.message);
+      }
+    };
+
     fetchPosts();
+    fetchAvgReplyTimes();
   }, []);
 
-  const handleConfirm = async (post: Post) => {
-    const result = await modDeletePostAction(post.id);
-
-    if (result.success) {
-      toast.success(result.message);
-      setPosts((prevPosts) =>
-        prevPosts === null
-          ? null
-          : prevPosts.filter((postToDelete) => postToDelete.id !== post.id)
-      );
-    } else {
-      toast.error(result.message);
-    }
+  const handleDelete = (postId: number) => {
+    setPosts((prevPosts) =>
+      prevPosts === null ? null : prevPosts.filter((post) => post.id !== postId)
+    );
   };
 
-  if (posts === null) {
+  if (!posts) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         Loading...
       </div>
     );
   }
-
   return (
     <section>
       <ModDashboardHeader />
-      <Table className="max-w-7xl mx-auto">
-        <TableCaption>Lista de todos os posts.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>Conteúdo</TableHead>
-            <TableHead>Respondido</TableHead>
-            <TableHead className="w-[100px]">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {posts.map((post) => (
-            <TableRow key={post.id}>
-              <TableCell className="font-medium">{post.id}</TableCell>
-              <TableCell>{trimContentSize(post.content, 20)}</TableCell>
-              <TableCell>
-                {post.answered ? (
-                  <FaCheck color="green" />
-                ) : (
-                  <FaX color="red" />
-                )}
-              </TableCell>
-              <TableCell className="flex items-center gap-x-5">
-                <Link href={`dashboard/posts/${post.id}/`}>
-                  <FaReply title="Responder" color="green" />
-                </Link>
-                <DeleteDialog
-                  triggerElement={
-                    <button title="Remover post">
-                      <FaTrashAlt title="Remover post" color="red" />
-                    </button>
-                  }
-                  title={`Tem a certeza que quer apagar o Post com ID ${post.id}?`}
-                  description="Esta ação é irreversível e irá remover este post permanentemente."
-                  onConfirm={async () => await handleConfirm(post)}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <DataTable columns={createColumns(handleDelete)} data={posts} />
+      <h2>Tempo médio de resposta:</h2>
+      <p>{`${avgResponseTime?.days} dias, ${avgResponseTime?.hours} horas, ${avgResponseTime?.minutes} minutos e ${avgResponseTime?.seconds} segundos.`}</p>
     </section>
   );
 }

@@ -13,7 +13,9 @@ const PostsList = ({ answeredPosts }: PostsListProps) => {
       <Card key={post.id} content={post.content} answer={post.answer} />
     ))
   ) : (
-    <div>Não existem Posts ainda...</div>
+    <div className="w-screen flex justify-center items-center">
+      Não existem Posts ainda...
+    </div>
   );
 };
 
