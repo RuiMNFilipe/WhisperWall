@@ -29,3 +29,19 @@ export const convertMilliseconds = (ms: number) => {
 
   return { days, hours, minutes, seconds };
 };
+
+export const formatTimeObject = (time: {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}) => {
+  const parts: string[] = [];
+
+  if (time.days > 0) parts.push(`${time.days} dias,`);
+  if (time.hours > 0) parts.push(`${time.hours} horas,`);
+  if (time.minutes > 0) parts.push(`${time.minutes} minutos e`);
+  if (time.seconds > 0) parts.push(`${time.seconds} segundos.`);
+
+  return parts.join(" ");
+};
