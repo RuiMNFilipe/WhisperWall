@@ -13,7 +13,9 @@ export default async function Home() {
   return (
     <main className="bg-slate-400 h-screen py-8">
       <PostForm />
-      <PostsList answeredPosts={result.success ? result.data! : []} />
+      <div className="grid grid-cols-4 gap-y-10">
+        <PostsList answeredPosts={result.success ? result.data! : []} />
+      </div>
     </main>
   );
 }
