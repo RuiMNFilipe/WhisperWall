@@ -6,17 +6,20 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { logoutModAction } from "@/actions/logout-mod";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
+import { toast } from "react-toastify";
 
 function ModDashboardHeader() {
   const { pending } = useFormStatus();
 
   const handleLogout = async () => {
-    try {
-      await logoutModAction();
-      redirect("/admin");
-    } catch (error) {
-      console.error(error);
-      throw error;
+    const result = await logoutModAction();
+
+    if (result.success && result.redirectTo) {
+      toast.success("Sessão terminada com sucesso!");
+      redirect(result.redirectTo);
+    } else {
+      toast.error(result.message);
+      redirect(result.redirectTo!);
     }
   };
 
