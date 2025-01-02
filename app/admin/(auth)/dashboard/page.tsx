@@ -9,6 +9,7 @@ import { Post } from "@prisma/client";
 import { getAvgResponseTimeAction } from "@/actions/getAvgResponseTime";
 import { ReplyTime } from "@/types";
 import { formatTimeObject } from "@/lib/utils";
+import { FaSpinner } from "react-icons/fa";
 
 function DashboardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -51,7 +52,7 @@ function DashboardPage() {
   if (!posts) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
-        Loading...
+        <FaSpinner className="animate-spin" size={30} />
       </div>
     );
   }
