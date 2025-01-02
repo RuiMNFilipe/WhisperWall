@@ -21,6 +21,7 @@ export const modReplyAction = async (
       data: {
         answer: answer as string,
         answered: true,
+        replied_at: new Date(),
       },
     });
 
