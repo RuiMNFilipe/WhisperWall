@@ -13,8 +13,10 @@ export function trimContentSize(content: string, maxChars: number) {
 
 export const setLocaleDateAndTime = (date: Date) => {
   const fullDate = date.toLocaleDateString("pt-PT");
-  const hours = date.getUTCHours();
-  const minutes = date.getUTCMinutes();
+
+  // Using padStart to add a leading 0 if hours or minutes are single-digit
+  const hours = date.getUTCHours().toString().padStart(2, "0");
+  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
 
   return `${fullDate} ${hours}:${minutes}`;
 };
