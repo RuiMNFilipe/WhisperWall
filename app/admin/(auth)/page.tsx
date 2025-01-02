@@ -30,34 +30,37 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <section>
+    <section className="w-screen h-screen flex flex-col justify-center items-center">
+      <h2>Aceder ao painel de moderação</h2>
       <form
-        className="flex flex-col items-center gap-y-5"
+        className="flex flex-col items-stretch gap-y-5 bg-slate-300 p-8 rounded-xl"
         action={handleSubmit}
       >
-        <div>
+        <div className="flex">
           <label htmlFor="email">Email: </label>
           <input
             type="text"
             name="email"
             id="email"
             placeholder="Example@email.com"
-            className="text-black"
+            className="text-black flex-1"
           />
         </div>
-        <div>
+        <div className="flex">
           <label htmlFor="password">Password: </label>
           <input
             type="password"
             name="password"
             id="password"
             placeholder="Tua senha"
-            className="text-black"
+            className="text-black flex-1"
           />
         </div>
         <FormButton
           type="submit"
-          className="rounded-md p-2 text-white bg-green-300"
+          className={`rounded-md p-2 text-white ${
+            pending ? "bg-green-300" : "bg-green-500"
+          } flex justify-center items-center`}
         >
           {pending ? <FaSpinner /> : "Entrar"}
         </FormButton>
