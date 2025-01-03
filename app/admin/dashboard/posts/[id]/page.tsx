@@ -5,7 +5,7 @@ import ReplyForm from "@/components/ReplyForm";
 import { Post } from "@prisma/client";
 import { toast } from "react-toastify";
 
-async function PostDetailPage({ params }: { params: { id: string } }) {
+async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { success, data, message } = await getPost(Number(id));
 
