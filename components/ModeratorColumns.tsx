@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { Button } from "./ui/button";
 import { ArrowUpDown } from "lucide-react";
 
-export const createColumns = (
+export const ModeratorColumns = (
   onDelete: (id: number) => void
 ): ColumnDef<Post>[] => [
   {

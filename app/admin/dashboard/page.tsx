@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/DataTable";
-import { createColumns } from "@/components/headers";
+import { ModeratorColumns } from "@/components/ModeratorColumns";
 import { useEffect, useState } from "react";
 import { getAllPostsAction } from "@/actions/get-all-posts";
 import { toast } from "react-toastify";
@@ -58,7 +58,7 @@ function DashboardPage() {
   }
   return (
     <section>
-      <DataTable columns={createColumns(handleDelete)} data={posts} />
+      <DataTable columns={ModeratorColumns(handleDelete)} data={posts} />
       <h2>
         Tempo médio de resposta:{" "}
         <span>
