@@ -1,0 +1,11 @@
+"use client";
+
+const AdminPanelPage = () => {
+  return (
+    <div>
+      <h1>Admin Panel Page</h1>
+    </div>
+  );
+};
+
+export default AdminPanelPage;
