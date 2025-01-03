@@ -14,8 +14,6 @@ export const getRoleAction = async (): Promise<ServerActionFeedback> => {
       ? cookieToken.split("|")
       : [null, null];
 
-    console.log("SESSION TOKEN:", sessionToken);
-
     if (!sessionToken)
       return {
         success: false,
