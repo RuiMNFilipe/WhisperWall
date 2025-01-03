@@ -13,7 +13,7 @@ async function PostDetailPage({ params }: { params: { id: string } }) {
     toast.error(message);
     return (
       <div className="h-screen w-screen flex justify-center items-center">
-        ´{message}
+        {message}
       </div>
     );
   }
