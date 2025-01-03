@@ -77,10 +77,8 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length}>
-                <TableCell className="flex justify-center items-center">
-                  Sem posts ainda.
-                </TableCell>
+              <TableCell colSpan={columns.length} className="text-center">
+                Sem posts ainda.
               </TableCell>
             </TableRow>
           )}

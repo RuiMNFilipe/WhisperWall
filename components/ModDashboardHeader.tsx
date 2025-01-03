@@ -3,25 +3,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaSignOutAlt } from "react-icons/fa";
-import { logoutModAction } from "@/actions/logout-mod";
-import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
-import { toast } from "react-toastify";
+import { Role } from "@prisma/client";
+import { usePathname } from "next/navigation";
 
-function ModDashboardHeader() {
+interface ModDashboardHeaderProps {
+  userRole: Role | null;
+  onLogout: () => void;
+}
+function ModDashboardHeader({ userRole, onLogout }: ModDashboardHeaderProps) {
   const { pending } = useFormStatus();
-
-  const handleLogout = async () => {
-    const result = await logoutModAction();
-
-    if (result.success && result.redirectTo) {
-      toast.success("Sessão terminada com sucesso!");
-      redirect(result.redirectTo);
-    } else {
-      toast.error(result.message);
-      redirect(result.redirectTo!);
-    }
-  };
+  const path = usePathname();
 
   return (
     <header className="flex justify-between items-center px-10">
@@ -33,10 +25,17 @@ function ModDashboardHeader() {
           height={50}
         />
       </Link>
-      <Link href={"/admin/dashboard"}>Dashboard</Link>
-      <button onClick={handleLogout} disabled={pending}>
-        <FaSignOutAlt />
-      </button>
+      {path === "/admin" ? null : (
+        <>
+          {userRole === Role.ADMIN && (
+            <Link href={"panel"}>Painel Administração</Link>
+          )}
+          <Link href={"/admin/dashboard"}>Dashboard</Link>
+          <button onClick={onLogout} disabled={pending}>
+            <FaSignOutAlt />
+          </button>
+        </>
+      )}
     </header>
   );
 }

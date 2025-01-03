@@ -1,4 +1,4 @@
-import { Post } from "@prisma/client";
+import { Moderator, Post, Role } from "@prisma/client";
 
 type ReplyTime = {
   days: number;
@@ -11,6 +11,7 @@ type ServerActionFeedback = {
   success: boolean;
   message?: string;
   redirectTo?: string;
-  data?: Post[] | Post | number;
+  data?: Post[] | Post | number | Moderator[];
   avgReplyTime?: string | ReplyTime;
+  role?: Role;
 };

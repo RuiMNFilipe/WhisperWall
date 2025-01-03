@@ -11,31 +11,30 @@ export const authenticateModAction = async (
   email: string,
   password: string
 ): Promise<ServerActionFeedback> => {
-  if (!email || !password) {
-    return {
-      success: false,
-      message: "Campos de email e password são obrigatórios.",
-    };
-  }
-
-  const moderator = await prisma.moderator.findUnique({
-    where: { email },
-  });
-
-  if (!moderator)
-    return {
-      success: false,
-      message: "Credenciais inválidas. Por favor, tente novamente.",
-    };
-
-  const isPasswordValid = await verifyPassword(password, moderator.password);
-
-  if (!isPasswordValid)
-    return {
-      success: false,
-      message: "Credenciais inválidas. Por favor, tente novamente.",
-    };
   try {
+    if (!email || !password) {
+      return {
+        success: false,
+        message: "Campos de email e password são obrigatórios.",
+      };
+    }
+
+    const moderator = await prisma.moderator.findUnique({
+      where: { email },
+    });
+
+    if (!moderator)
+      return {
+        success: false,
+        message: "Credenciais inválidas. Por favor, tente novamente.",
+      };
+
+    const isPasswordValid = await verifyPassword(password, moderator.password);
+    if (!isPasswordValid)
+      return {
+        success: false,
+        message: "Credenciais inválidas. Por favor, tente novamente.",
+      };
     const sessionToken = crypto.randomBytes(32).toString("hex");
 
     await prisma.moderator.update({
@@ -48,7 +47,7 @@ export const authenticateModAction = async (
 
     cookieStore.set({
       name: "sessionToken",
-      value: sessionToken,
+      value: `${sessionToken}|${moderator.role}`,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",

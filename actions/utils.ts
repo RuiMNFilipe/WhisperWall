@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 export async function hashPassword(password: string) {
   const saltRounds = 10;
@@ -11,3 +12,14 @@ export async function verifyPassword(
 ) {
   return await bcrypt.compare(inputPassword, storedPasswordHash);
 }
+
+export const splitSessionAndRole = async (cookieName: string) => {
+  try {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get(cookieName)?.value;
+
+    return sessionCookie ? sessionCookie.split("|") : [null, null];
+  } catch (error) {
+    throw error;
+  }
+};
