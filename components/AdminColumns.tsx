@@ -15,6 +15,7 @@ export const AdminColumns = (): ColumnDef<Moderator>[] => [
       return (
         <Button
           variant={"ghost"}
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           ID
@@ -33,6 +34,7 @@ export const AdminColumns = (): ColumnDef<Moderator>[] => [
       return (
         <Button
           variant={"ghost"}
+          className="px-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Tipo conta
@@ -43,12 +45,12 @@ export const AdminColumns = (): ColumnDef<Moderator>[] => [
   },
   {
     id: "actions",
-    header: "Ações",
+    header: () => <p className="text-right">Ações</p>,
     cell: ({ row }) => {
       const email = row.getValue("email") as number;
 
       return (
-        <div className="flex items-center gap-x-5">
+        <div className="flex items-center justify-end">
           <Button variant={"ghost"}>
             <FaPencil color="green" />
           </Button>
