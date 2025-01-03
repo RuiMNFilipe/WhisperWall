@@ -27,7 +27,7 @@ function ModDashboardHeader() {
       }
     };
 
-    fetchUserRole().then(() => console.log(userRole));
+    fetchUserRole();
   }, [userRole]);
 
   const handleLogout = async () => {
