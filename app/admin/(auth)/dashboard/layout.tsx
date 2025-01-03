@@ -1,3 +1,5 @@
+"use client";
+
 import ModDashboardHeader from "@/components/ModDashboardHeader";
 
 export default function AdminLayout({
