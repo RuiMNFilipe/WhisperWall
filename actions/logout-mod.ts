@@ -5,11 +5,13 @@ import { redirect } from "next/navigation";
 
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
+import { splitSessionAndRole } from "@/actions/utils";
 
 export async function logoutModAction(): Promise<ServerActionFeedback> {
   try {
     const cookieStore = await cookies();
-    const sessionToken = cookieStore.get("sessionToken")?.value;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [sessionToken, _] = await splitSessionAndRole("sessionToken");
 
     if (!sessionToken) {
       console.error("No session token found in cookies.");
