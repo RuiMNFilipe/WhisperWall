@@ -3,16 +3,11 @@
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
 import { Role } from "@prisma/client";
-import { cookies } from "next/headers";
+import { splitSessionAndRole } from "./utils";
 
 export const getRoleAction = async (): Promise<ServerActionFeedback> => {
   try {
-    const cookieStore = await cookies();
-
-    const cookieToken = cookieStore.get("sessionToken")?.value;
-    const [sessionToken, role] = cookieToken
-      ? cookieToken.split("|")
-      : [null, null];
+    const [sessionToken, role] = await splitSessionAndRole("sessionToken");
 
     if (!sessionToken)
       return {
