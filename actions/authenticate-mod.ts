@@ -48,7 +48,7 @@ export const authenticateModAction = async (
 
     cookieStore.set({
       name: "sessionToken",
-      value: sessionToken,
+      value: `${sessionToken}|${moderator.role}`,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
