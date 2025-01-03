@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
 
   const isAdminPath = req.nextUrl.pathname === "/admin";
   const isDashboardPath = req.nextUrl.pathname.startsWith("/admin/dashboard");
-  const isAdminPanel = req.nextUrl.pathname.startsWith("/admin/adminpanel");
+  const isAdminPanel = req.nextUrl.pathname.startsWith("/admin/panel");
 
   const [sessionToken, role] = sessionCookie
     ? sessionCookie.split("|")
@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // Redirect unauthenticated users from /admin/dashboard to /admin
-  if (isDashboardPath && !sessionToken) {
+  if ((isDashboardPath || isAdminPanel) && !sessionToken) {
     return NextResponse.redirect(new URL("/admin", req.url));
   }
 
