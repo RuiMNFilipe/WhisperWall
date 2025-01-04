@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/db/db";
-import { revalidatePath } from "next/cache";
 
 export const createPostAction = async (formData: FormData) => {
   try {
@@ -15,7 +14,6 @@ export const createPostAction = async (formData: FormData) => {
       },
     });
 
-    revalidatePath("/");
     return { success: true, message: "Post submetido com sucesso!" };
   } catch (error) {
     console.error(error);
