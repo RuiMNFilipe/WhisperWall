@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   description: "Where you can be heard anonymously",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{
