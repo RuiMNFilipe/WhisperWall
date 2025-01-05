@@ -2,9 +2,20 @@
 
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
+import { splitSessionAndRole } from "./utils";
+import { Role } from "@prisma/client";
 
 export const getUsersAction = async (): Promise<ServerActionFeedback> => {
   try {
+    const [sessionToken, role] = await splitSessionAndRole("sessionToken");
+
+    if (!sessionToken || role !== Role.ADMIN) {
+      return {
+        success: false,
+        message: "Apenas administradores podem aceder a esta ação.",
+      };
+    }
+
     const users = await prisma.moderator.findMany();
 
     return { success: true, data: users };
