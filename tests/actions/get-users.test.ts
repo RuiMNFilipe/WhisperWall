@@ -1,4 +1,5 @@
 import { getUsersAction } from "@/actions/get-users";
+import { splitSessionAndRole } from "@/actions/utils";
 import { prisma } from "@/db/db";
 
 jest.mock("@/db/db", () => ({
@@ -7,6 +8,10 @@ jest.mock("@/db/db", () => ({
       findMany: jest.fn(),
     },
   },
+}));
+
+jest.mock("@/actions/utils", () => ({
+  splitSessionAndRole: jest.fn(),
 }));
 
 describe("getUsersAction", () => {
@@ -27,10 +32,15 @@ describe("getUsersAction", () => {
         role: "MODERATOR",
       },
     ];
+    (splitSessionAndRole as jest.Mock).mockResolvedValue([
+      "mockSessionToken",
+      "ADMIN",
+    ]);
     (prisma.moderator.findMany as jest.Mock).mockResolvedValue(mockUsersList);
 
     const result = await getUsersAction();
 
+    expect(splitSessionAndRole).toHaveBeenCalledWith("sessionToken");
     expect(prisma.moderator.findMany).toHaveBeenCalled();
     expect(result).toEqual({
       success: true,
@@ -50,13 +60,33 @@ describe("getUsersAction", () => {
     });
   });
 
-  it("should handle errors gracefully", async () => {
+  it("should return an error if the user is not an admin", async () => {
+    (splitSessionAndRole as jest.Mock).mockResolvedValue([
+      "mockSessionToken",
+      "invalidRole",
+    ]);
+
+    const result = await getUsersAction();
+
+    expect(splitSessionAndRole).toHaveBeenCalledWith("sessionToken");
+    expect(result).toEqual({
+      success: false,
+      message: "Apenas administradores podem aceder a esta ação.",
+    });
+  });
+
+  it("should handle database errors gracefully", async () => {
+    (splitSessionAndRole as jest.Mock).mockResolvedValue([
+      "mockSessionToken",
+      "ADMIN",
+    ]);
     (prisma.moderator.findMany as jest.Mock).mockRejectedValue(
       new Error("Database error")
     );
 
     const result = await getUsersAction();
 
+    expect(splitSessionAndRole).toHaveBeenCalledWith("sessionToken");
     expect(result).toEqual({
       success: false,
       message:
