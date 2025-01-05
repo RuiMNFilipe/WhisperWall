@@ -1,13 +1,13 @@
 "use server";
 
-import { getPost } from "@/actions/get-post";
+import { getPostAction } from "@/actions/get-post";
 import ReplyForm from "@/components/ReplyForm";
 import { Post } from "@prisma/client";
 import { toast } from "react-toastify";
 
 async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { success, data, message } = await getPost(Number(id));
+  const { success, data, message } = await getPostAction(Number(id));
 
   if (!success || !data) {
     toast.error(message);

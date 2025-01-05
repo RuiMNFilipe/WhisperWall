@@ -3,7 +3,9 @@
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
 
-export const getPost = async (id: number): Promise<ServerActionFeedback> => {
+export const getPostAction = async (
+  id: number
+): Promise<ServerActionFeedback> => {
   try {
     const post = await prisma.post.findUnique({
       where: {

@@ -7,6 +7,19 @@ export const modDeletePostAction = async (
   id: number
 ): Promise<ServerActionFeedback> => {
   try {
+    const postToDelete = await prisma.post.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!postToDelete) {
+      return {
+        success: false,
+        message: "Post que quer apagar não existe.",
+      };
+    }
+
     await prisma.post.delete({
       where: {
         id,

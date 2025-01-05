@@ -16,7 +16,7 @@ export const getAnsweredPostsAction =
       return {
         success: false,
         message:
-          "Ocorreu um erro inesperado ao tentar obter lista de Posts respondidos. Por favor tente mais tarde.",
+          "Ocorreu um erro inesperado ao tentar obter lista de Posts respondidos. Por favor, tente mais tarde.",
       };
     }
   };

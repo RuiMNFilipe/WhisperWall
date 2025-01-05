@@ -5,6 +5,8 @@ import { ServerActionFeedback } from "@/types";
 import { Role } from "@prisma/client";
 import { splitSessionAndRole } from "./utils";
 
+const validRoles = [Role.ADMIN, Role.MODERATOR];
+
 export const getRoleAction = async (): Promise<ServerActionFeedback> => {
   try {
     const [sessionToken, role] = await splitSessionAndRole("sessionToken");
@@ -14,6 +16,13 @@ export const getRoleAction = async (): Promise<ServerActionFeedback> => {
         success: false,
         message: "Utilizador tem que entrar para aceder a esta página.",
       };
+
+    if (!validRoles.includes(role as Role)) {
+      return {
+        success: false,
+        message: "A função do utilizador é inválida.",
+      };
+    }
 
     const moderator = await prisma.moderator.findUnique({
       where: {
