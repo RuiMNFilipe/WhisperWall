@@ -15,6 +15,10 @@ jest.mock("@/actions/utils", () => ({
 }));
 
 describe("getUsersAction", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("should get list of users successfully", async () => {
     const mockUsersList = [
       {
