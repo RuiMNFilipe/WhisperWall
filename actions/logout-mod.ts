@@ -10,8 +10,8 @@ import { splitSessionAndRole } from "@/actions/utils";
 export async function logoutModAction(): Promise<ServerActionFeedback> {
   try {
     const cookieStore = await cookies();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [sessionToken, _] = await splitSessionAndRole("sessionToken");
+
+    const [sessionToken, role] = await splitSessionAndRole("sessionToken");
 
     if (!sessionToken) {
       console.error("No session token found in cookies.");
@@ -24,7 +24,7 @@ export async function logoutModAction(): Promise<ServerActionFeedback> {
       },
     });
 
-    if (!moderator) {
+    if (!moderator || !role) {
       console.error("No moderator found in the provided session token.");
       return {
         success: false,
