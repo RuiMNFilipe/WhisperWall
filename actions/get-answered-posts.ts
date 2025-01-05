@@ -1,5 +1,6 @@
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
+import { revalidatePath } from "next/cache";
 
 export const getAnsweredPostsAction =
   async (): Promise<ServerActionFeedback> => {
@@ -9,6 +10,8 @@ export const getAnsweredPostsAction =
           answered: true,
         },
       });
+
+      revalidatePath("/");
 
       return { success: true, data: posts };
     } catch (error) {
