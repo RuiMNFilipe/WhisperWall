@@ -1,5 +1,7 @@
 "use server";
 
+export const dynamic = "force-dynamic";
+
 import { getAnsweredPostsAction } from "@/actions/get-answered-posts";
 import PostForm from "@/components/PostForm";
 import PostsList from "@/components/PostsList";
