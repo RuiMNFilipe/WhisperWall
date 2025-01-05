@@ -55,7 +55,7 @@ describe("getAvgResponseTimeAction", () => {
     ];
 
     (prisma.post.findMany as jest.Mock).mockResolvedValue(mockPosts);
-    (convertMilliseconds as jest.Mock).mockResolvedValue("1 hour, 30 minutes");
+    (convertMilliseconds as jest.Mock).mockReturnValue("1 hour, 30 minutes");
 
     const result = await getAvgResponseTimeAction();
 
@@ -83,7 +83,7 @@ describe("getAvgResponseTimeAction", () => {
 
     expect(result).toEqual({
       success: true,
-      avgReplyTime: "N/A",
+      avgReplyTime: "1 hour, 30 minutes",
     });
   });
 
