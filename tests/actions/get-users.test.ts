@@ -64,6 +64,18 @@ describe("getUsersAction", () => {
     });
   });
 
+  it("should return an error if the user is not authenticated", async () => {
+    (splitSessionAndRole as jest.Mock).mockResolvedValue([null, null]);
+
+    const result = await getUsersAction();
+
+    expect(splitSessionAndRole).toHaveBeenCalledWith("sessionToken");
+    expect(result).toEqual({
+      success: false,
+      message: "Apenas utilizadores autenticados podem aceder a esta página.",
+    });
+  });
+
   it("should return an error if the user is not an admin", async () => {
     (splitSessionAndRole as jest.Mock).mockResolvedValue([
       "mockSessionToken",
@@ -75,7 +87,7 @@ describe("getUsersAction", () => {
     expect(splitSessionAndRole).toHaveBeenCalledWith("sessionToken");
     expect(result).toEqual({
       success: false,
-      message: "Apenas administradores podem aceder a esta ação.",
+      message: "Apenas administradores podem aceder a esta página.",
     });
   });
 
