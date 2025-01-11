@@ -9,10 +9,17 @@ export const getUsersAction = async (): Promise<ServerActionFeedback> => {
   try {
     const [sessionToken, role] = await splitSessionAndRole("sessionToken");
 
-    if (!sessionToken || role !== Role.ADMIN) {
+    if (!sessionToken) {
       return {
         success: false,
-        message: "Apenas administradores podem aceder a esta ação.",
+        message: "Apenas utilizadores autenticados podem aceder a esta página.",
+      };
+    }
+
+    if (role !== Role.ADMIN) {
+      return {
+        success: false,
+        message: "Apenas administradores podem aceder a esta página.",
       };
     }
 
