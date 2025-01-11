@@ -2,11 +2,21 @@
 
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
+import { splitSessionAndRole } from "./utils";
 
 export const getPostAction = async (
   id: number
 ): Promise<ServerActionFeedback> => {
   try {
+    const [sessionToken] = await splitSessionAndRole("sessionToken");
+
+    if (!sessionToken) {
+      return {
+        success: false,
+        message: "Apenas utilizadores autenticados podem aceder a esta página.",
+      };
+    }
+
     const post = await prisma.post.findUnique({
       where: {
         id,
