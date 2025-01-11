@@ -14,7 +14,6 @@ export default function AdminLoginPage() {
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     const result = await authenticateModAction(
       email as string,
       password as string
