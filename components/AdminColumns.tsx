@@ -2,7 +2,7 @@
 
 import { Moderator } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaPlus, FaTrashAlt } from "react-icons/fa";
 import DeleteDialog from "./DeleteDialog";
 import { Button } from "./ui/button";
 import { ArrowUpDown } from "lucide-react";
@@ -51,12 +51,12 @@ export const AdminColumns = (): ColumnDef<Moderator>[] => [
 
       return (
         <div className="flex items-center justify-end">
-          <Button variant={"ghost"}>
-            <FaPencil color="green" />
+          <Button variant={"ghost"} title="Editar utilizador">
+            <FaPencil color="orange" />
           </Button>
           <DeleteDialog
             triggerElement={
-              <Button variant={"ghost"} title="Remover post">
+              <Button variant={"ghost"} title="Eliminar utilizador">
                 <FaTrashAlt title="Remover moderador" color="red" />
               </Button>
             }
@@ -64,6 +64,9 @@ export const AdminColumns = (): ColumnDef<Moderator>[] => [
             description="Esta ação é irreversível e irá remover este post permanentemente."
             onConfirm={() => {}}
           />
+          <Button variant={"ghost"} title="Adicionar utilizador">
+            <FaPlus color="green" />
+          </Button>
         </div>
       );
     },
