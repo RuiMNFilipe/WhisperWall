@@ -2,11 +2,30 @@
 
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
+import { splitSessionAndRole } from "./utils";
+import { Role } from "@prisma/client";
 
 export const modDeletePostAction = async (
   id: number
 ): Promise<ServerActionFeedback> => {
   try {
+    const [sessionToken, role] = await splitSessionAndRole("sessionToken");
+
+    if (!sessionToken) {
+      return {
+        success: false,
+        message: "Utilizador tem que estar autenticado.",
+      };
+    }
+
+    if (role !== Role.ADMIN) {
+      return {
+        success: false,
+        message:
+          "Utilizador não tem permissões suficientes para remover utilizadores.",
+      };
+    }
+
     const postToDelete = await prisma.post.findUnique({
       where: {
         id,
