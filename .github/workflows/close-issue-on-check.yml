@@ -2,7 +2,7 @@ name: Close Subtasks on Checklist Update
 
 on:
   issues:
-    types: [edited]
+    types: [edited] # Triggers when an issue's body is updated
 
 jobs:
   close_subtasks:
@@ -12,33 +12,31 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const core = require("@actions/core");
-            const github = require("@actions/github");
+            const { context, github } = require("@actions/github");
 
-            const { context } = github;
             const body = context.payload.issue.body;
 
             if (!body) {
-              core.info("No issue body found, skipping.");
+              console.log("No issue body found.");
               return;
             }
 
-            // Find all checklist items
-            const checklistItems = body.match(/- \[(x|X)\] .*#\d+/g) || [];
+            // Find all checked checklist items linked to issues
+            const checkedItems = body.match(/- \[x\] .*#\d+/gi) || [];
 
-            for (const item of checklistItems) {
+            for (const item of checkedItems) {
               const issueNumberMatch = item.match(/#(\d+)/);
               if (!issueNumberMatch) continue;
 
-              const subtaskNumber = parseInt(issueNumberMatch[1]);
+              const issueNumber = parseInt(issueNumberMatch[1], 10);
 
-              // Close the subtask if the box is checked
+              // Close the linked issue
               await github.rest.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: subtaskNumber,
+                issue_number: issueNumber,
                 state: "closed",
               });
 
-              core.info(`Subtask #${subtaskNumber} closed.`);
+              console.log(`Closed issue #${issueNumber}`);
             }
