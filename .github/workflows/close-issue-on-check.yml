@@ -1,0 +1,44 @@
+name: Close Subtasks on Checklist Update
+
+on:
+  issues:
+    types: [edited]
+
+jobs:
+  close_subtasks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Closed Subtasks
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const core = require("@actions/core");
+            const github = require("@actions/github");
+
+            const { context } = github;
+            const body = context.payload.issue.body;
+
+            if (!body) {
+              core.info("No issue body found, skipping.");
+              return;
+            }
+
+            // Find all checklist items
+            const checklistItems = body.match(/- \[(x|X)\] .*#\d+/g) || [];
+
+            for (const item of checklistItems) {
+              const issueNumberMatch = item.match(/#(\d+)/);
+              if (!issueNumberMatch) continue;
+
+              const subtaskNumber = parseInt(issueNumberMatch[1]);
+
+              // Close the subtask if the box is checked
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: subtaskNumber,
+                state: "closed",
+              });
+
+              core.info(`Subtask #${subtaskNumber} closed.`);
+            }
