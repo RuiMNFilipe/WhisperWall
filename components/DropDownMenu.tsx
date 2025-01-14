@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,18 +8,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Role } from "@prisma/client";
 
-function DropDownMenu() {
+interface DropDownMenuProps {
+  triggerBtn: string | JSX.Element;
+  label: string;
+  options: string[];
+  onSelect: (option: Role) => void;
+}
+
+function DropDownMenu({
+  label,
+  options,
+  triggerBtn,
+  onSelect,
+}: DropDownMenuProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+      <DropdownMenuTrigger>{triggerBtn}</DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>{label}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
+        {options.map((option, idx) => (
+          <DropdownMenuItem key={idx} onClick={() => onSelect(option as Role)}>
+            {option}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
