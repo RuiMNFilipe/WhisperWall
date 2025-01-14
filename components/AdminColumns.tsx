@@ -2,10 +2,11 @@
 
 import { Moderator, Role } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { FaCaretDown, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { FaPlus, FaTrashAlt } from "react-icons/fa";
 import DeleteDialog from "./DeleteDialog";
 import { Button } from "./ui/button";
 import { ArrowUpDown, Check } from "lucide-react";
+import { PiCaretUpDownDuotone } from "react-icons/pi";
 import { FaPencil } from "react-icons/fa6";
 import DropDownMenu from "./DropDownMenu";
 
@@ -77,7 +78,7 @@ export const AdminColumns = ({
             options={roles}
             triggerBtn={
               <span className="flex item-center gap-x-2">
-                <FaCaretDown />
+                <PiCaretUpDownDuotone className="h-4 w-4 mt-[2px]" />
                 {role}
               </span>
             }
