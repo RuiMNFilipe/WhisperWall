@@ -1,6 +1,7 @@
 "use client";
 
 import { getUsersAction } from "@/actions/get-users";
+import { updateUserRoleAction } from "@/actions/update-user-role";
 import { AdminColumns } from "@/components/AdminColumns";
 import { DataTable } from "@/components/DataTable";
 import { Moderator, Role } from "@prisma/client";
@@ -11,6 +12,9 @@ import { toast } from "react-toastify";
 const AdminPanelPage = () => {
   const [usersList, setUsersList] = useState<Moderator[] | null>(null);
   const [editingRowId, setEditingRowId] = useState<number | null>(null);
+  const [originalRoleMap, setOriginalRoleMap] = useState<Record<number, Role>>(
+    {}
+  );
 
   useEffect(() => {
     const fetchUsersList = async () => {
@@ -18,6 +22,20 @@ const AdminPanelPage = () => {
 
       if (result.success) {
         setUsersList(result.data as Moderator[]);
+        const initialRoleMap = (
+          result.data as {
+            id: number;
+            email: string;
+            password: string;
+            sessionToken: string | null;
+            role: Role;
+          }[]
+        )?.reduce((acc, user) => {
+          acc[user.id] = user.role;
+          return acc;
+        }, {} as Record<number, Role>);
+
+        setOriginalRoleMap(initialRoleMap);
       } else {
         toast.error(result.message);
       }
@@ -27,7 +45,13 @@ const AdminPanelPage = () => {
   }, []);
 
   const onConfirmRoleChange = async (id: number, newRole: Role) => {
-    console.log(`User ${id} role changed to ${newRole}`);
+    const result = await updateUserRoleAction(id, newRole);
+
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   if (!usersList)
@@ -43,6 +67,7 @@ const AdminPanelPage = () => {
     onConfirmRoleChange,
     usersList,
     setUsersList,
+    originalRoleMap,
   });
 
   return (
