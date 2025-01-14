@@ -16,6 +16,7 @@ interface AdminColumnsProps {
   onConfirmRoleChange: (id: number, newRole: Role) => Promise<void>;
   usersList: Moderator[];
   setUsersList: (updatedUsers: Moderator[]) => void;
+  originalRoleMap: Record<number, Role>;
 }
 
 export const AdminColumns = ({
@@ -24,6 +25,7 @@ export const AdminColumns = ({
   onConfirmRoleChange,
   usersList,
   setUsersList,
+  originalRoleMap,
 }: AdminColumnsProps): ColumnDef<Moderator>[] => {
   const roles: Role[] = ["ADMIN", "MODERATOR"];
 
@@ -95,6 +97,7 @@ export const AdminColumns = ({
       cell: ({ row }) => {
         const email = row.getValue("email") as string;
         const id = row.getValue("id") as number;
+        const role = row.getValue("role") as Role;
 
         return (
           <div className="flex items-center justify-end">
@@ -102,11 +105,12 @@ export const AdminColumns = ({
               <Button
                 variant={"ghost"}
                 onClick={() => {
-                  const updatedUser = usersList.find((user) => user.id === id);
+                  const originalRole = originalRoleMap[id];
 
-                  if (updatedUser) {
-                    onConfirmRoleChange(id, updatedUser.role);
+                  if (role !== originalRole) {
+                    onConfirmRoleChange(id, role);
                   }
+
                   setEditingRowId(null);
                 }}
               >
