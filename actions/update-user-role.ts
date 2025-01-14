@@ -1,4 +1,4 @@
-"user server";
+"use server";
 
 import { ServerActionFeedback } from "@/types";
 import { Role } from "@prisma/client";
