@@ -164,7 +164,7 @@ export const AdminColumns = ({
                   title="Eliminar utilizador"
                   disabled={id === -1}
                 >
-                  <FaTrashAlt title="Remover moderador" color="red" />
+                  <FaTrashAlt color="red" />
                 </Button>
               }
               title={`Tem a certeza que quer apagar ${email}?`}
