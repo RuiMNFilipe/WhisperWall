@@ -134,6 +134,7 @@ export const AdminColumns = ({
             {editingRowId === id ? (
               <Button
                 variant={"ghost"}
+                disabled={id === -1}
                 onClick={() => {
                   const originalRole = originalRoleMap[id];
 
@@ -151,13 +152,18 @@ export const AdminColumns = ({
                 variant={"ghost"}
                 title="Editar utilizador"
                 onClick={() => setEditingRowId(row.getValue("id") as number)}
+                disabled={id === -1}
               >
                 <FaPencil color="orange" />
               </Button>
             )}
             <DeleteDialog
               triggerElement={
-                <Button variant={"ghost"} title="Eliminar utilizador">
+                <Button
+                  variant={"ghost"}
+                  title="Eliminar utilizador"
+                  disabled={id === -1}
+                >
                   <FaTrashAlt title="Remover moderador" color="red" />
                 </Button>
               }
