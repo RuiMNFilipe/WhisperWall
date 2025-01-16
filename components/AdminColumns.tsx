@@ -2,7 +2,7 @@
 
 import { Moderator, Role } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { FaPlus, FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import DeleteDialog from "./DeleteDialog";
 import { Button } from "./ui/button";
 import { ArrowUpDown, Check } from "lucide-react";
@@ -34,6 +34,10 @@ export const AdminColumns = ({
       user.id === id ? { ...user, role: newRole } : user
     );
     setUsersList(updatedUsers);
+
+    if (id !== -1) {
+      onConfirmRoleChange(id, newRole);
+    }
   };
 
   return [
@@ -55,6 +59,16 @@ export const AdminColumns = ({
     {
       accessorKey: "email",
       header: "Email",
+      cell: ({ row }) => {
+        const id = row.getValue("id") as number;
+        const email = row.getValue("email") as string;
+
+        return id === -1 ? (
+          <input type="email" className="border rounded px-2 py-1" />
+        ) : (
+          <span>{email}</span>
+        );
+      },
     },
     {
       accessorKey: "role",
@@ -73,6 +87,22 @@ export const AdminColumns = ({
       cell: ({ row }) => {
         const role = row.getValue("role") as Role;
         const id = row.getValue("id") as number;
+
+        if (id === -1) {
+          return (
+            <DropDownMenu
+              label="Escolha o tipo de conta"
+              options={roles}
+              triggerBtn={
+                <span className="flex item-center gap-x-2">
+                  <PiCaretUpDownDuotone className="h-4 w-4 mt-[2px]" />
+                  {role || Role.MODERATOR}
+                </span>
+              }
+              onSelect={() => {}}
+            />
+          );
+        }
 
         return editingRowId === id ? (
           <DropDownMenu
@@ -135,9 +165,6 @@ export const AdminColumns = ({
               description="Esta ação é irreversível e irá remover este post permanentemente."
               onConfirm={() => {}}
             />
-            <Button variant={"ghost"} title="Adicionar utilizador">
-              <FaPlus color="green" />
-            </Button>
           </div>
         );
       },
