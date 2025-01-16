@@ -1,12 +1,14 @@
 "use client";
 
+import { adminAddModAction } from "@/actions/admin-add-mod";
 import { getUsersAction } from "@/actions/get-users";
 import { updateUserRoleAction } from "@/actions/update-user-role";
 import { AdminColumns } from "@/components/AdminColumns";
 import { DataTable } from "@/components/DataTable";
+import { Button } from "@/components/ui/button";
 import { Moderator, Role } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaUserPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const AdminPanelPage = () => {
@@ -15,6 +17,8 @@ const AdminPanelPage = () => {
   const [originalRoleMap, setOriginalRoleMap] = useState<Record<number, Role>>(
     {}
   );
+  const [addingUser, setAddingUser] = useState<boolean>(false);
+  const [newUser, setNewUser] = useState<Moderator | null>(null);
 
   useEffect(() => {
     const fetchUsersList = async () => {
@@ -61,18 +65,94 @@ const AdminPanelPage = () => {
       </div>
     );
 
+  const handleAddUserRow = () => {
+    if (!addingUser) {
+      const newEmptyUser: Partial<Moderator> = {
+        id: -1,
+        email: "",
+        password: "",
+        role: undefined,
+      };
+      setNewUser(newEmptyUser as Moderator);
+      setAddingUser(true);
+    }
+  };
+
+  const handleSaveNewUser = async (formData: FormData) => {
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const role = formData.get("role") as Role;
+
+    if (email === "" || password === "" || !role) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    const result = await adminAddModAction(formData);
+
+    if (result.success) {
+      toast.success(result.message);
+
+      const updatedUsersResult = await getUsersAction();
+      if (updatedUsersResult.success) {
+        setUsersList(updatedUsersResult.data as Moderator[]);
+      }
+
+      setAddingUser(false);
+      setNewUser(null);
+    } else {
+      toast.error(result.message);
+    }
+  };
+
+  const handleCancelNewUser = () => {
+    setAddingUser(false);
+    setNewUser(null);
+  };
+
   const adminCols = AdminColumns({
     editingRowId,
     setEditingRowId,
     onConfirmRoleChange,
-    usersList,
+    usersList: [...usersList, ...(newUser ? [newUser] : [])],
     setUsersList,
     originalRoleMap,
   });
 
   return (
-    <section>
-      <DataTable columns={adminCols} data={usersList} />
+    <section className="flex flex-col items-center">
+      <h1>Painel de Administração</h1>
+      <Button
+        variant={"outline"}
+        className="bg-green-500 hover:bg-green-600"
+        title="Adicionar utilizador"
+        onClick={handleAddUserRow}
+      >
+        <FaUserPlus color="white" />
+        <p className="text-white">Adicionar utilizador</p>
+      </Button>
+      <DataTable
+        className="min-w-[75%]"
+        columns={adminCols}
+        data={[...usersList, ...(newUser ? [newUser as Moderator] : [])]}
+      />
+      {addingUser && (
+        <div className="mt-4 flex justify-center gap-4">
+          <Button
+            variant={"outline"}
+            className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white"
+          >
+            Guardar
+          </Button>
+          <Button
+            variant={"outline"}
+            className="bg-red-500 hover:bg-red-600 text-white hover:text-white"
+            onClick={handleCancelNewUser}
+          >
+            Cancelar
+          </Button>
+        </div>
+      )}
     </section>
   );
 };
