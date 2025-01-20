@@ -10,14 +10,21 @@ import { getAvgResponseTimeAction } from "@/actions/getAvgResponseTime";
 import { ReplyTime } from "@/types";
 import { formatTimeObject } from "@/lib/utils";
 import { FaSpinner } from "react-icons/fa";
+import { useSearchParams } from "next/navigation";
 
 function DashboardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [avgResponseTime, setAvgResponseTime] = useState<ReplyTime | null>(
     null
   );
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    const error = searchParams.get("error");
+    if (error === "unauthorized") {
+      toast.error("Apenas administradores podem aceder a essa página.");
+    }
+
     const fetchPosts = async () => {
       const result = await getAllPostsAction();
 
@@ -41,7 +48,7 @@ function DashboardPage() {
 
     fetchPosts();
     fetchAvgReplyTimes();
-  }, []);
+  }, [searchParams]);
 
   const handleDelete = (postId: number) => {
     setPosts((prevPosts) =>
