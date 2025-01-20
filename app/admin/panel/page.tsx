@@ -3,13 +3,15 @@
 import { adminAddModAction } from "@/actions/admin-add-mod";
 import { getUsersAction } from "@/actions/get-users";
 import { updateUserRoleAction } from "@/actions/update-user-role";
-import { AdminColumns } from "@/components/AdminColumns";
+import { AdminColumns } from "@/lib/AdminColumns";
 import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Moderator, Role } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { FaSpinner, FaUserPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useTempNewUser } from "@/hooks/useTempNewUser";
+import { adminDeleteUserAction } from "@/actions/admin-delete-user";
 
 const AdminPanelPage = () => {
   const [usersList, setUsersList] = useState<Moderator[] | null>(null);
@@ -18,7 +20,12 @@ const AdminPanelPage = () => {
     {}
   );
   const [addingUser, setAddingUser] = useState<boolean>(false);
-  const [newUser, setNewUser] = useState<Moderator | null>(null);
+  const {
+    resetTempNewUser,
+    setTempNewUser,
+    tempNewUser,
+    updateTempNewUserField,
+  } = useTempNewUser();
 
   useEffect(() => {
     const fetchUsersList = async () => {
@@ -71,52 +78,72 @@ const AdminPanelPage = () => {
         id: -1,
         email: "",
         password: "",
-        role: undefined,
+        role: Role.MODERATOR, // default value
       };
-      setNewUser(newEmptyUser as Moderator);
+      setTempNewUser(newEmptyUser as Moderator);
       setAddingUser(true);
     }
   };
 
-  const handleSaveNewUser = async (formData: FormData) => {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const role = formData.get("role") as Role;
-
-    if (email === "" || password === "" || !role) {
-      toast.error("Por favor, preencha todos os campos.");
+  const handleSaveNewUser = async () => {
+    if (!tempNewUser?.email || !tempNewUser?.role) {
       return;
     }
+
+    const formData = new FormData();
+    formData.append("email", tempNewUser.email);
+    formData.append("role", tempNewUser.role);
+    formData.append("password", "test");
 
     const result = await adminAddModAction(formData);
 
     if (result.success) {
       toast.success(result.message);
-
       const updatedUsersResult = await getUsersAction();
+
       if (updatedUsersResult.success) {
         setUsersList(updatedUsersResult.data as Moderator[]);
       }
 
+      resetTempNewUser();
       setAddingUser(false);
-      setNewUser(null);
     } else {
       toast.error(result.message);
     }
   };
 
   const handleCancelNewUser = () => {
+    resetTempNewUser();
     setAddingUser(false);
-    setNewUser(null);
+  };
+
+  const handleDeleteUser = async (id: number) => {
+    const result = await adminDeleteUserAction(id);
+
+    if (result.success) {
+      toast.success(result.message);
+      const updatedUsersResult = await getUsersAction();
+
+      if (updatedUsersResult.success) {
+        setUsersList(updatedUsersResult.data as Moderator[]);
+      }
+    } else {
+      toast.error(result.message);
+    }
   };
 
   const adminCols = AdminColumns({
     editingRowId,
     setEditingRowId,
     onConfirmRoleChange,
-    usersList: [...usersList, ...(newUser ? [newUser] : [])],
+    usersList: [
+      ...usersList,
+      ...(tempNewUser ? [tempNewUser as Moderator] : []),
+    ],
     setUsersList,
     originalRoleMap,
+    updateTempNewUserField,
+    handleDeleteUser,
   });
 
   return (
@@ -134,13 +161,17 @@ const AdminPanelPage = () => {
       <DataTable
         className="min-w-[75%]"
         columns={adminCols}
-        data={[...usersList, ...(newUser ? [newUser as Moderator] : [])]}
+        data={[
+          ...usersList,
+          ...(tempNewUser ? [tempNewUser as Moderator] : []),
+        ]}
       />
       {addingUser && (
         <div className="mt-4 flex justify-center gap-4">
           <Button
             variant={"outline"}
             className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white"
+            onClick={() => handleSaveNewUser()}
           >
             Guardar
           </Button>
