@@ -59,6 +59,7 @@ export const authenticateModAction = async (
       success: true,
       message: "Entrou com sucesso!",
       redirectTo: "/admin/dashboard/",
+      role: moderator.role,
     };
   } catch (error) {
     console.error("Um erro ocorreu: ", error);
