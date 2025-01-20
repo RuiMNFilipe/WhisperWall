@@ -26,7 +26,10 @@ export async function middleware(req: NextRequest) {
 
   // Redirect non-admin users from /admin/adminpanel to /admin/dashboard
   if (sessionToken && isAdminPanel && role !== Role.ADMIN) {
-    return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    const url = req.nextUrl.clone();
+    url.pathname = "/admin/dashboard";
+    url.searchParams.set("error", "unauthorized");
+    return NextResponse.redirect(url);
   }
 
   // Allow access to any other path
