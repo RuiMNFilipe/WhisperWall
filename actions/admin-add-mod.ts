@@ -8,6 +8,7 @@ import { prisma } from "@/db/db";
 export const adminAddModAction = async (
   formData: FormData
 ): Promise<ServerActionFeedback> => {
+  const newUserRole = formData.get("role") as Role;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
@@ -39,7 +40,7 @@ export const adminAddModAction = async (
       data: {
         email,
         password: hashedPassword,
-        role: Role.MODERATOR,
+        role: newUserRole ?? Role.MODERATOR,
       },
     });
 
