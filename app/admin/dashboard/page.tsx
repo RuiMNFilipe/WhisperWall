@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/DataTable";
-import { ModeratorColumns } from "@/components/ModeratorColumns";
+import { ModeratorColumns } from "@/lib/columns/ModeratorColumns";
 import { useEffect, useState } from "react";
 import { getAllPostsAction } from "@/actions/get-all-posts";
 import { toast } from "react-toastify";

@@ -3,7 +3,7 @@
 import { adminAddModAction } from "@/actions/admin-add-mod";
 import { getUsersAction } from "@/actions/get-users";
 import { updateUserRoleAction } from "@/actions/update-user-role";
-import { AdminColumns } from "@/lib/AdminColumns";
+import { AdminColumns } from "@/lib/columns/AdminColumns";
 import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
 import { Moderator, Role } from "@prisma/client";

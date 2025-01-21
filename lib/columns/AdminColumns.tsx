@@ -3,12 +3,12 @@
 import { Moderator, Role } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaTrashAlt } from "react-icons/fa";
-import DeleteDialog from "../components/DeleteDialog";
-import { Button } from "../components/ui/button";
+import DeleteDialog from "../../components/DeleteDialog";
+import { Button } from "../../components/ui/button";
 import { ArrowUpDown, Check } from "lucide-react";
 import { PiCaretUpDownDuotone } from "react-icons/pi";
 import { FaPencil } from "react-icons/fa6";
-import DropDownMenu from "../components/DropDownMenu";
+import DropDownMenu from "../../components/DropDownMenu";
 
 interface AdminColumnsProps {
   editingRowId: number | null;
