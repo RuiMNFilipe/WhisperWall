@@ -6,7 +6,11 @@ function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
 
   return (
     <button disabled={pending} {...props}>
-      {pending ? <FaSpinner className="animate-spin" /> : "Entrar"}
+      {pending ? (
+        <FaSpinner aria-label="Loading spinner" className="animate-spin" />
+      ) : (
+        "Entrar"
+      )}
     </button>
   );
 }
