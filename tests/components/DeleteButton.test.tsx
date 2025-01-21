@@ -1,5 +1,4 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import DeleteButton from "@/components/DeleteButton";
 
@@ -16,16 +15,15 @@ describe("DeleteButton component", () => {
     expect(svgElement).toHaveAttribute("color", "red");
   });
 
-  it("calls the onClick handled when clicked", async () => {
+  it("calls the onClick handled when clicked", () => {
     const onClickMock = jest.fn();
-    const user = userEvent.setup();
 
     render(<DeleteButton onClick={onClickMock} />);
 
     const icon = screen.getByTestId("delete-icon");
 
     // Simulate user click
-    await user.click(icon);
+    fireEvent.click(icon);
 
     // Assert that the onClick handler was called
     expect(onClickMock).toHaveBeenCalledTimes(1);

@@ -1,5 +1,4 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import { DataTable } from "@/components/DataTable";
 import { CellContext, ColumnDef } from "@tanstack/react-table";
@@ -51,13 +50,12 @@ describe("DataTable component", () => {
   });
 
   it("sorts data when clicking on sortable headers", async () => {
-    const user = userEvent.setup();
     render(<DataTable columns={columns} data={data} />);
 
     const idHeader = screen.getByText("ID");
 
     // Simulate clicking on the header to sort
-    await user.click(idHeader);
+    fireEvent.click(idHeader);
 
     // Check if the data is sorted
     const rows = screen.getAllByRole("row");
