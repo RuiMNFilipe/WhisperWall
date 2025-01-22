@@ -74,6 +74,7 @@ describe("authenticateModAction", () => {
       success: true,
       message: "Entrou com sucesso!",
       redirectTo: "/admin/dashboard/",
+      role: "moderator",
     });
   });
 
