@@ -3,9 +3,9 @@
 import { getRoleAction } from "@/actions/get-role";
 import { logoutModAction } from "@/actions/logout-mod";
 import ModDashboardHeader from "@/components/ModDashboardHeader";
-import { Role } from "@prisma/client";
+import useAuthStore from "@/stores/authStore";
 import { redirect } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 
 export default function AdminLayout({
@@ -13,14 +13,14 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [userRole, setUserRole] = useState<Role | null>(null);
+  const { login, logout, role } = useAuthStore();
 
   useEffect(() => {
     const fetchUserRole = async () => {
       const result = await getRoleAction();
 
       if (result.success && result.role) {
-        setUserRole(result.role);
+        login(result.role);
       } else {
         console.error(result.message);
         toast.error(result.message);
@@ -28,13 +28,13 @@ export default function AdminLayout({
     };
 
     fetchUserRole();
-  }, []);
+  }, [login]);
 
   const handleLogout = async () => {
     const result = await logoutModAction();
 
     if (result.success && result.redirectTo) {
-      setUserRole(null);
+      logout();
       toast.success("Sessão terminada com sucesso!");
       redirect(result.redirectTo);
     } else {
@@ -45,7 +45,7 @@ export default function AdminLayout({
 
   return (
     <section>
-      <ModDashboardHeader userRole={userRole} onLogout={handleLogout} />
+      <ModDashboardHeader userRole={role} onLogout={handleLogout} />
       {children}
     </section>
   );

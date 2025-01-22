@@ -6,10 +6,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { FaCheck, FaReply, FaTrashAlt } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
-import DeleteDialog from "./DeleteDialog";
+import DeleteDialog from "../../components/DeleteDialog";
 import { modDeletePostAction } from "@/actions/mod-delete-post";
 import { toast } from "react-toastify";
-import { Button } from "./ui/button";
+import { Button } from "../../components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 
 export const ModeratorColumns = (

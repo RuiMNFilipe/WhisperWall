@@ -2,6 +2,7 @@
 
 import { authenticateModAction } from "@/actions/authenticate-mod";
 import FormButton from "@/components/Button";
+import useAuthStore from "@/stores/authStore";
 import { redirect } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { FaSpinner } from "react-icons/fa6";
@@ -9,18 +10,19 @@ import { toast } from "react-toastify";
 
 export default function AdminLoginPage() {
   const { pending } = useFormStatus();
+  const { login } = useAuthStore();
 
   const handleSubmit = async (formData: FormData) => {
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     const result = await authenticateModAction(
       email as string,
       password as string
     );
 
     if (result.success) {
+      if (result.role) login(result.role);
       toast.success(result.message);
       redirect("/admin/dashboard/");
     } else {

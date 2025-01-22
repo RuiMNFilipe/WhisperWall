@@ -18,7 +18,8 @@ import {
 } from "./ui/table";
 import { useState } from "react";
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData, TValue>
+  extends React.HTMLAttributes<HTMLElement> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
@@ -26,6 +27,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  ...props
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -41,7 +43,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <div {...props}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

@@ -2,12 +2,22 @@
 
 import { prisma } from "@/db/db";
 import { ServerActionFeedback } from "@/types";
+import { splitSessionAndRole } from "./utils";
 
 export const modReplyAction = async (
   formData: FormData,
   postId: number
 ): Promise<ServerActionFeedback> => {
   try {
+    const [sessionToken] = await splitSessionAndRole("sessionToken");
+
+    if (!sessionToken) {
+      return {
+        success: false,
+        message: "Utilizador tem que entrar para poder responder.",
+      };
+    }
+
     const answer = formData.get("answer");
 
     if (!answer || typeof answer !== "string" || answer.trim() === "") {
