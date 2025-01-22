@@ -43,3 +43,10 @@ next-env.d.ts
 /prisma
 .vercel
 .env*.local
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
