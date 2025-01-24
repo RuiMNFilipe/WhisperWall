@@ -8,27 +8,23 @@ import { Post } from "@prisma/client";
 export default async function Home() {
   const result = await getAnsweredPostsAction();
 
-  const getNumberOfColsClass = (length: number) => {
-    switch (length) {
-      case 1:
-        return "grid-cols-1";
-      case 2:
-        return "grid-cols-2";
-      case 3:
-        return "grid-cols-3";
-      default:
-        return "grid-cols-4";
-    }
+  const colClasses = {
+    1: "grid-cols-1",
+    2: "grid-cols-2",
+    3: "grid-cols-3",
+    4: "grid-cols-4",
   };
 
-  const numberOfColsClass = getNumberOfColsClass(
-    (result.data as Post[]).length
-  );
+  const colLength = (result.data as Post[]).length;
+  const numberOfColsClass =
+    colClasses[(Math.min(colLength), 4)] || "grid-cols-4";
 
   return (
-    <main className="bg-slate-400 h-screen py-8">
+    <main className="bg-slate-400 h-screen py-8 overflow-y-scroll">
       <PostForm />
-      <div className={`grid ${numberOfColsClass} gap-y-10`}>
+      <div
+        className={`grid grid-cols-1 md:grid-cols-2 xl:${numberOfColsClass} gap-y-10`}
+      >
         <PostsList
           answeredPosts={result.success ? (result.data as Post[]) : []}
         />
