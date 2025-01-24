@@ -58,7 +58,7 @@ function DashboardPage() {
 
   if (!posts) {
     return (
-      <div className="w-screen h-screen flex justify-center items-center">
+      <div className="flex justify-center items-center">
         <FaSpinner className="animate-spin" size={30} />
       </div>
     );

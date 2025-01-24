@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
     <section className="w-screen h-screen flex flex-col justify-center items-center">
       <h2>Aceder ao painel de moderação</h2>
       <form
-        className="flex flex-col items-stretch gap-y-5 bg-slate-300 p-8 rounded-xl"
+        className="flex flex-col items-stretch gap-y-5 bg-slate-300 p-4 sm:p-8 rounded-xl"
         action={handleSubmit}
       >
         <div className="flex">

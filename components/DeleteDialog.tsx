@@ -35,7 +35,7 @@ const DeleteDialog = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => onConfirm()}>
+          <AlertDialogAction className="bg-red-500" onClick={() => onConfirm()}>
             Apagar
           </AlertDialogAction>
         </AlertDialogFooter>
