@@ -158,14 +158,16 @@ const AdminPanelPage = () => {
         <FaUserPlus color="white" />
         <p className="text-white">Adicionar utilizador</p>
       </Button>
-      <DataTable
-        className="min-w-[75%]"
-        columns={adminCols}
-        data={[
-          ...usersList,
-          ...(tempNewUser ? [tempNewUser as Moderator] : []),
-        ]}
-      />
+      <div className="w-full overflow-auto">
+        <DataTable
+          className="min-w-[75%]"
+          columns={adminCols}
+          data={[
+            ...usersList,
+            ...(tempNewUser ? [tempNewUser as Moderator] : []),
+          ]}
+        />
+      </div>
       {addingUser && (
         <div className="mt-4 flex justify-center gap-4">
           <Button
