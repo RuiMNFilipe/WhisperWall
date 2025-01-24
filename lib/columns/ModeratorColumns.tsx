@@ -93,14 +93,16 @@ export const ModeratorColumns = (
 
       return (
         <div className="flex items-center gap-x-5">
-          <Link href={`dashboard/posts/${postId}`}>
-            <FaReply title="Responder" color="green" />
-          </Link>
+          <Button variant={"ghost"}>
+            <Link href={`dashboard/posts/${postId}`}>
+              <FaReply title="Responder" color="green" />
+            </Link>
+          </Button>
           <DeleteDialog
             triggerElement={
-              <button title="Remover post">
+              <Button variant={"ghost"} title="Remover post">
                 <FaTrashAlt title="Remover post" color="red" />
-              </button>
+              </Button>
             }
             title={`Tem a certeza que quer apagar o Post com ID ${postId}?`}
             description="Esta ação é irreversível e irá remover este post permanentemente."
