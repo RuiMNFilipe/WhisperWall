@@ -93,15 +93,15 @@ export const ModeratorColumns = (
 
       return (
         <div className="flex items-center gap-x-5">
-          <Button variant={"ghost"}>
+          <Button title="Responder" variant={"ghost"}>
             <Link href={`dashboard/posts/${postId}`}>
-              <FaReply title="Responder" color="green" />
+              <FaReply color="green" />
             </Link>
           </Button>
           <DeleteDialog
             triggerElement={
-              <Button variant={"ghost"} title="Remover post">
-                <FaTrashAlt title="Remover post" color="red" />
+              <Button title="Apagar" variant={"ghost"}>
+                <FaTrashAlt color="red" />
               </Button>
             }
             title={`Tem a certeza que quer apagar o Post com ID ${postId}?`}
