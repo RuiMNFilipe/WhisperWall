@@ -1,6 +1,6 @@
 import { adminAddModAction } from "@/actions/admin-add-mod";
 import { hashPassword, splitSessionAndRole } from "@/actions/utils";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { Role } from "@prisma/client";
 
 jest.mock("@/db/db", () => ({

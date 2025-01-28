@@ -1,5 +1,5 @@
 import { getAvgResponseTimeAction } from "@/actions/getAvgResponseTime";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { convertMilliseconds } from "@/lib/utils";
 
 jest.mock("@/db/db", () => ({

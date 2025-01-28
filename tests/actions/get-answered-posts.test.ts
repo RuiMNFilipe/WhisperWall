@@ -1,5 +1,5 @@
 import { getAnsweredPostsAction } from "@/actions/get-answered-posts";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 
 jest.mock("@/db/db", () => ({
   prisma: {

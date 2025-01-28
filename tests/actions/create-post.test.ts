@@ -1,5 +1,5 @@
 import { createPostAction } from "@/actions/create-post";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 
 // Mock Prisma
 jest.mock("@/db/db", () => ({

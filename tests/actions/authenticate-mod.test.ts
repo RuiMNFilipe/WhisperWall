@@ -1,6 +1,6 @@
 import { authenticateModAction } from "@/actions/authenticate-mod";
 import { verifyPassword } from "@/actions/utils";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 
 // Mock dependencies

@@ -1,6 +1,6 @@
 import { logoutModAction } from "@/actions/logout-mod";
 import { splitSessionAndRole } from "@/actions/utils";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

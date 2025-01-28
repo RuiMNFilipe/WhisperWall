@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { convertMilliseconds } from "@/lib/utils";
 import { ServerActionFeedback } from "@/types";
 

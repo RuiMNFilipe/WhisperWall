@@ -3,7 +3,7 @@
 import { Role } from "@prisma/client";
 import { hashPassword, splitSessionAndRole } from "./utils";
 import { ServerActionFeedback } from "@/types";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 
 export const adminAddModAction = async (
   formData: FormData

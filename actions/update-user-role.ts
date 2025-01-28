@@ -3,7 +3,7 @@
 import { ServerActionFeedback } from "@/types";
 import { Role } from "@prisma/client";
 import { splitSessionAndRole } from "./utils";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 
 export const updateUserRoleAction = async (
   id: number,

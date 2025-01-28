@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { ServerActionFeedback } from "@/types";
 import { Role } from "@prisma/client";
 import { splitSessionAndRole } from "./utils";

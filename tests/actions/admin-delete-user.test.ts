@@ -1,6 +1,6 @@
 import { adminDeleteUserAction } from "@/actions/admin-delete-user";
 import { splitSessionAndRole } from "@/actions/utils";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { Moderator } from "@prisma/client";
 
 jest.mock("@/db/db", () => ({

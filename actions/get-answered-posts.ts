@@ -1,4 +1,4 @@
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { ServerActionFeedback } from "@/types";
 
 export const getAnsweredPostsAction =

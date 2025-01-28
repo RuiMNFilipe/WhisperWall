@@ -1,6 +1,6 @@
 import { modReplyAction } from "@/actions/mod-reply";
 import { splitSessionAndRole } from "@/actions/utils";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 
 jest.mock("@/db/db", () => ({
   prisma: {

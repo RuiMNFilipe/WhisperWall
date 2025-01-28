@@ -1,4 +1,4 @@
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { splitSessionAndRole } from "@/actions/utils";
 import { getRoleAction } from "@/actions/get-role";
 

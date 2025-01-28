@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { ServerActionFeedback } from "@/types";
 import { splitSessionAndRole } from "@/actions/utils";
 

@@ -3,7 +3,7 @@
 import crypto from "crypto";
 import { cookies } from "next/headers";
 
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 import { verifyPassword } from "./utils";
 import { ServerActionFeedback } from "@/types";
 

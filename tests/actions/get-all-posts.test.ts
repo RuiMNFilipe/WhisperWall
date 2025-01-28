@@ -1,5 +1,5 @@
 import { getAllPostsAction } from "@/actions/get-all-posts";
-import { prisma } from "@/db/db";
+import { prisma } from "@/lib/db";
 
 // Mock Prisma
 jest.mock("@/db/db", () => ({
